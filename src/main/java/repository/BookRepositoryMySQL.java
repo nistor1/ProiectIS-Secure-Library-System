@@ -115,7 +115,7 @@ public class BookRepositoryMySQL implements BookRepository {
 
     @Override
     public void removeAll() {
-        String sql = "DELETE FROM book WHERE id = ?;";
+        String sql = "DELETE FROM book;";
 
 
         try{

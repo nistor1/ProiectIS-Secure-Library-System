@@ -11,8 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BookRepositoryMySQLTest {
     private Connection connection;
@@ -26,29 +25,60 @@ public class BookRepositoryMySQLTest {
         connection = connectionWrapper.getConnection();
         bookRepository = new BookRepositoryMySQL(connection);
 
-        List<Book> books = bookRepository.findAll();
+        Book book1 = new BookBuilder()
+                .setId(1L)
+                .setAuthor("', '', null); SLEEP(20); --")
+                .setTitle("Fram Ursul Polar")
+                .setPublishedDate(LocalDate.of(2010, 6, 2))
+                .build();
+        Book book2 = new BookBuilder()
+                .setId(2L)
+                .setAuthor("', '', null); SLEEP(20); --")
+                .setTitle("Fram Ursul Polar")
+                .setPublishedDate(LocalDate.of(2010, 6, 2))
+                .build();
+        bookRepository.save(book1);
+        bookRepository.save(book2);
 
-        assertEquals(books.size(), expectedNumberOfBooks);
+        List<Book> allBooks = bookRepository.findAll();
+        int i = 1;
+        for(Book b : allBooks) {
+            if(i == 1) {
+                assertTrue(b.equals(book1));
+            } else {
+                assertTrue(b.equals(book2));
+            }
+            i++;
+        }
     }
 
     @Test
     public void testFindById() {
 
-        Long id = 23L;
+        Book book = new BookBuilder()
+                .setId(1L)
+                .setAuthor("', '', null); SLEEP(20); --")
+                .setTitle("Fram Ursul Polar")
+                .setPublishedDate(LocalDate.of(2010, 6, 2))
+                .build();
+
         JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("test_library");
         connection = connectionWrapper.getConnection();
         bookRepository = new BookRepositoryMySQL(connection);
+        bookRepository.save(book);
 
-        Optional<Book> book = bookRepository.findById(id);
 
-        Boolean isPresent = book.isPresent();
-        assertTrue(isPresent);
+        Optional<Book> bookTemp = bookRepository.findById(book.getId());
+        Book book2 = bookTemp.get();
+
+        assertTrue(book.equals(book2));
     }
 
     @Test
     public void testSave() {
 
         Book book = new BookBuilder()
+                .setId(1L)
                 .setAuthor("', '', null); SLEEP(20); --")
                 .setTitle("Fram Ursul Polar")
                 .setPublishedDate(LocalDate.of(2010, 6, 2))
@@ -60,6 +90,8 @@ public class BookRepositoryMySQLTest {
 
         boolean isSaved = bookRepository.save(book);
         assertTrue(isSaved);
+
+
 
     }
 
