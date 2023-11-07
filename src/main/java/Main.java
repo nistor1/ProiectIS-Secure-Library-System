@@ -17,15 +17,17 @@ public class Main {
 
         BookRepository bookRepository = new BookRepositoryMySQL(connectionWrapper.getConnection());
 
+        bookRepository.removeAll();
         Book book = new BookBuilder()
+                .setId(2L)
                 .setAuthor("', '', null); SLEEP(20); --")
                 .setTitle("Fram Ursul Polar")
                 .setPublishedDate(LocalDate.of(2010, 6, 2))
                 .build();
 
         bookRepository.save(book);
-
-        System.out.println(bookRepository.findAll());
+        System.out.println(bookRepository.findById(2L));
+       // System.out.println(bookRepository.findAll());
 
 
     }

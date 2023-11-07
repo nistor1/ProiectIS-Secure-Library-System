@@ -47,7 +47,6 @@ public class BookRepositoryMySQL implements BookRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
 
-            int rowsInserted = preparedStatement.executeUpdate();
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {

@@ -24,6 +24,7 @@ public class BookRepositoryMySQLTest {
         JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("test_library");
         connection = connectionWrapper.getConnection();
         bookRepository = new BookRepositoryMySQL(connection);
+        bookRepository.removeAll();
 
         Book book1 = new BookBuilder()
                 .setId(1L)
@@ -65,6 +66,8 @@ public class BookRepositoryMySQLTest {
         JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("test_library");
         connection = connectionWrapper.getConnection();
         bookRepository = new BookRepositoryMySQL(connection);
+        bookRepository.removeAll();
+
         bookRepository.save(book);
 
 
@@ -87,6 +90,7 @@ public class BookRepositoryMySQLTest {
         JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("test_library");
         connection = connectionWrapper.getConnection();
         bookRepository = new BookRepositoryMySQL(connection);
+        bookRepository.removeAll();
 
         boolean isSaved = bookRepository.save(book);
         assertTrue(isSaved);
