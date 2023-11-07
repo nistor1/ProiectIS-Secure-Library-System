@@ -93,11 +93,11 @@ public class BookRepositoryMySQL implements BookRepository {
 
 
         try{
-           Statement statement = connection.createStatement();
-            statement.executeUpdate(newSql);
-            return true;
+           //Statement statement = connection.createStatement();
+           //statement.executeUpdate(newSql);
+            //return true;
 
-/*            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, book.getAuthor());
             preparedStatement.setString(2, book.getTitle());
             preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
@@ -105,7 +105,7 @@ public class BookRepositoryMySQL implements BookRepository {
             int rowsInserted = preparedStatement.executeUpdate();
 
             return (rowsInserted != 1) ? false : true;
-*/
+
         } catch (SQLException e){
             e.printStackTrace();
             return false;

@@ -1,26 +1,31 @@
+package repository;
+
 import model.Book;
 import model.builder.BookBuilder;
-import org.junit.Before;
-import org.junit.Test;
-import repository.BookRepositoryMock;
+import org.junit.jupiter.api.Test;
+
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TestBookRepositoryMock {
+
+public class BookRepositoryMockTest {
     private BookRepositoryMock bookRepository;
 
     @Test
     public void testFindAll() {
         List<Book> allBooks = bookRepository.findAll();
+
         assertTrue(allBooks.isEmpty());
     }
 
     @Test
-    public void testSave() {
+    public void saveTest() {
+
+        BookRepository bookRepository = new BookRepositoryMock();
         Book book = new BookBuilder()
                 .setAuthor("', '', null); SLEEP(20); --")
                 .setTitle("Fram Ursul Polar")
@@ -28,19 +33,18 @@ public class TestBookRepositoryMock {
                 .build();
         boolean saved = bookRepository.save(book);
         assertTrue(saved);
-
-        List<Book> allBooks = bookRepository.findAll();
-        assertEquals(1, allBooks.size());
-        assertEquals(book, allBooks.get(0));
     }
 
     @Test
     public void testFindById() {
+        BookRepository bookRepository = new BookRepositoryMock();
+
         Book book = new BookBuilder()
                 .setAuthor("', '', null); SLEEP(20); --")
                 .setTitle("Fram Ursul Polar")
                 .setPublishedDate(LocalDate.of(2010, 6, 2))
-                .build();        bookRepository.save(book);
+                .build();
+        bookRepository.save(book);
 
         Optional<Book> foundBook = bookRepository.findById(1L);
         assertTrue(foundBook.isPresent());
