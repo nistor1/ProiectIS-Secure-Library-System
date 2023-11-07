@@ -52,4 +52,14 @@ public class Book {
     public String toString(){
         return String.format("Book ID: %d | Author: %s | Title: %s | Published Date: %s", id, author, title, publishedDate);
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id.equals(book.id) &&
+                author.equals(book.author) &&
+                title.equals(book.title) &&
+                publishedDate.equals(book.publishedDate);
+    }
 }
