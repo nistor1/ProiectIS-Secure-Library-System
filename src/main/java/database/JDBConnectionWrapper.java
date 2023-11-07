@@ -15,7 +15,6 @@ public class JDBConnectionWrapper {
 
     private Connection connection;
 
-
     public JDBConnectionWrapper(String schema) {
         try {
             Class.forName(JDBC_DRIVER);
@@ -48,5 +47,7 @@ public class JDBConnectionWrapper {
 
         statement.execute(sql);
     }
+
+
 
 }
