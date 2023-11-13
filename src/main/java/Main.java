@@ -1,13 +1,14 @@
 import database.JDBConnectionWrapper;
+import model.AudioBook;
 import model.Book;
+import model.EBook;
+import model.builder.AudioBookBuilder;
 import model.builder.BookBuilder;
+import model.builder.EBookBuilder;
 import repository.BookRepository;
-import repository.BookRepositoryMock;
 import repository.BookRepositoryMySQL;
 
-import java.sql.Connection;
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Main {
     public static void main(String[] args){
@@ -23,11 +24,37 @@ public class Main {
                 .setTitle("Fram Ursul Polar")
                 .setPublishedDate(LocalDate.of(2010, 6, 2))
                 .build();
+        bookRepository.save(book);
 
-        //bookRepository.save(book);
+        Book eBook = new EBookBuilder()
+                .setAuthor("a1")
+                .setId(2L)
+                .setTitle("dfg")
+                .setPublishedDate(LocalDate.of(2010, 6, 2))
+                .asEBook().setFormat("pdf")
+                .build();
+        bookRepository.save(eBook);
+
+        Book audioBook = new AudioBookBuilder()
+                .setAuthor("a2")
+                .setId(2L)
+                .setTitle("dfg")
+                .setPublishedDate(LocalDate.of(2010, 6, 2))
+                .asAudioBook().setRunTime(54)
+                .build();
+        bookRepository.save(eBook);
+
         //System.out.println(bookRepository.findById(27L));
         for(Book b : bookRepository.findAll()) {
-            System.out.println(b);
+            if(b instanceof EBook) {
+                EBook bTemp = (EBook) b;
+               bTemp.toString();
+            } else if (b instanceof AudioBook) {
+                AudioBook bTemp = (AudioBook)b;
+                bTemp.toString();
+            } else if (b instanceof Book) {
+                System.out.println(b);
+            }
         }
        //System.out.println(bookRepository.findAll());
 

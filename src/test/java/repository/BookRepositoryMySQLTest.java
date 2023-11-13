@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BookRepositoryMySQLTest {
     private Connection connection;
-    private BookRepositoryMySQL bookRepository;
+    private BookRepository bookRepository;
 
     @Test
     public void testFindAll() {

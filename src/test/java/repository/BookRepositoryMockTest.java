@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class BookRepositoryMockTest {
-    private BookRepositoryMock bookRepository;
+    private BookRepository bookRepository;
 
     @Test
     public void testFindAll() {
