@@ -1,25 +1,27 @@
 package repository;
 
 import model.Book;
+import model.EBook;
 import model.builder.BookBuilder;
+import model.builder.EBookBuilder;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class BookRepositoryMySQL implements BookRepository<Book> {
+public class EBookRepositoryMySQL implements BookRepository<EBook> {
     private final Connection connection;
 
-    public BookRepositoryMySQL(Connection connection){
+    public EBookRepositoryMySQL(Connection connection){
         this.connection = connection;
     }
 
     @Override
-    public List<Book> findAll() {
+    public List<EBook> findAll() {
         String sql = "SELECT * FROM book;";
 
-        List<Book> books = new ArrayList<>();
+        List<EBook> books = new ArrayList<>();
         try{
             Statement statement = connection.createStatement();
 
@@ -38,7 +40,7 @@ public class BookRepositoryMySQL implements BookRepository<Book> {
     }
 
     @Override
-    public Optional<Book> findById(Long id) {
+    public Optional<EBook> findById(Long id) {
         String sql = "SELECT * FROM book WHERE id = ?;";
 
 
@@ -51,7 +53,7 @@ public class BookRepositoryMySQL implements BookRepository<Book> {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
 
-                Book book = getBookFromResultSet(resultSet);
+                EBook book = getBookFromResultSet(resultSet);
                 return Optional.of(book);
             }
 
@@ -82,21 +84,22 @@ public class BookRepositoryMySQL implements BookRepository<Book> {
     // DON'T CONCATENATE Strings!
 
     @Override
-    public boolean save(Book book) {
-        String sql = "INSERT INTO book VALUES(null, ?, ?, ?);";
+    public boolean save(EBook book) {
+        String sql = "INSERT INTO book VALUES(null, ?, ?, ?, ?);";
 
         String newSql = "INSERT INTO book VALUES(null, \'" + book.getAuthor() +"\', \'"+ book.getTitle()+"\', null );";
 
 
         try{
-           //Statement statement = connection.createStatement();
-           //statement.executeUpdate(newSql);
+            //Statement statement = connection.createStatement();
+            //statement.executeUpdate(newSql);
             //return true;
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, book.getAuthor());
             preparedStatement.setString(2, book.getTitle());
             preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
+            preparedStatement.setString(4, book.getFormat());
 
             int rowsInserted = preparedStatement.executeUpdate();
 
@@ -126,12 +129,14 @@ public class BookRepositoryMySQL implements BookRepository<Book> {
 
 
 
-    private Book getBookFromResultSet(ResultSet resultSet) throws SQLException {
-        return new BookBuilder()
+    private EBook getBookFromResultSet(ResultSet resultSet) throws SQLException {
+        return new EBookBuilder()
                 .setId(resultSet.getLong("id"))
                 .setAuthor(resultSet.getString("author"))
                 .setTitle(resultSet.getString("title"))
                 .setPublishedDate(new java.sql.Date((resultSet.getDate("publishedDate")).getTime()).toLocalDate())
+                .asEBook()
+                .setFormat(resultSet.getString("format"))
                 .build();
     }
 }
