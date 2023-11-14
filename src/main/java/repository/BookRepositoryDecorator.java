@@ -2,7 +2,7 @@ package repository;
 
 import model.Book;
 
-public abstract class BookRepositoryDecorator implements BookRepository<Book>{
+public abstract class BookRepositoryDecorator {
 
     protected BookRepository decoratedRepository;
 

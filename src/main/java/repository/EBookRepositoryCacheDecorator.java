@@ -1,32 +1,33 @@
 package repository;
 
-import model.Book;
+import model.AudioBook;
+import model.EBook;
 
 import java.util.List;
 import java.util.Optional;
 
-public class BookRepositoryCacheDecorator extends BookRepositoryDecorator  implements BookRepository<Book>{
-    private Cache<Book> cache;
+public class EBookRepositoryCacheDecorator  extends BookRepositoryDecorator  implements BookRepository<EBook>{
+    private Cache<EBook> cache;
 
-    public BookRepositoryCacheDecorator(BookRepository bookRepository, Cache<Book> cache){
+    public EBookRepositoryCacheDecorator(BookRepository bookRepository, Cache<EBook> cache){
         super(bookRepository);
         this.cache = cache;
     }
 
     @Override
-    public List<Book> findAll() {
+    public List<EBook> findAll() {
         if (cache.hasResult()){
             return cache.load();
         }
 
-        List<Book> books = decoratedRepository.findAll();
+        List<EBook> books = decoratedRepository.findAll();
         cache.save(books);
 
         return books;
     }
 
     @Override
-    public Optional<Book> findById(Long id) {
+    public Optional<EBook> findById(Long id) {
         if (cache.hasResult()){
             return cache.load()
                     .stream()
@@ -34,13 +35,13 @@ public class BookRepositoryCacheDecorator extends BookRepositoryDecorator  imple
                     .findFirst();
         }
 
-        Optional<Book> book = decoratedRepository.findById(id);
+        Optional<EBook> book = decoratedRepository.findById(id);
 
         return book;
     }
 
     @Override
-    public boolean save(Book book) {
+    public boolean save(EBook book) {
         cache.invalidateCache();
         return decoratedRepository.save(book);
     }
@@ -51,3 +52,4 @@ public class BookRepositoryCacheDecorator extends BookRepositoryDecorator  imple
         decoratedRepository.removeAll();
     }
 }
+
