@@ -1,32 +1,49 @@
+import controller.LoginController;
+import database.DatabaseConnectionFactory;
 import database.JDBConnectionWrapper;
+import javafx.application.Application;
+import javafx.stage.Stage;
 import model.Book;
 import model.builder.BookBuilder;
-import repository.BookRepository;
-import repository.BookRepositoryMock;
-import repository.BookRepositoryMySQL;
+import model.validator.UserValidator;
+import repository.book.BookRepository;
+import repository.book.BookRepositoryCacheDecorator;
+import repository.book.BookRepositoryMySQL;
+import repository.book.Cache;
+import repository.security.RightsRolesRepository;
+import repository.security.RightsRolesRepositoryMySQL;
+import repository.user.UserRepository;
+import repository.user.UserRepositoryMySQL;
+import service.book.BookService;
+import service.book.BookServiceImpl;
+import service.user.AuthenticationService;
+import service.user.AuthenticationServiceMySQL;
+import view.LoginView;
 
 import java.sql.Connection;
 import java.time.LocalDate;
-import java.util.Date;
 
-public class Main {
+import static database.Constants.Schemas.PRODUCTION;
+
+public class Main extends Application {
     public static void main(String[] args){
-        System.out.println("Hello world!");
+        launch(args);
+    }
 
-        JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("test_library");
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        final Connection connection = new JDBConnectionWrapper(PRODUCTION).getConnection();
 
-        BookRepository bookRepository = new BookRepositoryMySQL(connectionWrapper.getConnection());
+        final RightsRolesRepository rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
+        final UserRepository userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
 
-        Book book = new BookBuilder()
-                .setAuthor("', '', null); SLEEP(20); --")
-                .setTitle("Fram Ursul Polar")
-                .setPublishedDate(LocalDate.of(2010, 6, 2))
-                .build();
+        final AuthenticationService authenticationService = new AuthenticationServiceMySQL(userRepository,
+                rightsRolesRepository);
 
-        bookRepository.save(book);
+        final LoginView loginView = new LoginView(primaryStage);
 
-        System.out.println(bookRepository.findAll());
+        final UserValidator userValidator = new UserValidator(userRepository);
 
-
+        new LoginController(loginView, authenticationService, userValidator);
     }
 }

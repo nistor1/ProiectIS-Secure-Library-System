@@ -1,12 +1,14 @@
 package model;
 
+// Java Bean -
+
+// POJO - Plain Old Java Object
+
+
 import java.time.LocalDate;
 import java.util.Date;
 
-// Java Bean
-// POJO - Plain Old Java Object - nu extinde nicio clasă, nu implemnetează nicio interfață și nu are nicio adnotare
-
-public class Book {
+public class Book{
 
     private Long id;
 
@@ -15,6 +17,7 @@ public class Book {
     private String title;
 
     private LocalDate publishedDate;
+
 
     public Long getId() {
         return id;
@@ -50,6 +53,6 @@ public class Book {
 
     @Override
     public String toString(){
-        return String.format("Book ID: %d | Author: %s | Title: %s | Published Date: %s", id, author, title, publishedDate);
+        return String.format("Id: %d | Title: %s | Author: %s | Date: %s", this.id, this.title, this.author, this.publishedDate);
     }
 }

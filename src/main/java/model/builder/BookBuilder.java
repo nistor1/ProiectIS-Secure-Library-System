@@ -6,7 +6,9 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class BookBuilder {
+
     private Book book;
+
 
     public BookBuilder(){
         book = new Book();
@@ -32,11 +34,10 @@ public class BookBuilder {
         return this;
     }
 
-    public Book build(){
+    public Book build()
+    {
         return book;
     }
-
-
 
 
 }
