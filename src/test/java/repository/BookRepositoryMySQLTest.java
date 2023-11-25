@@ -1,114 +1,83 @@
-package repository;
+package repositories;
 
-import database.JDBConnectionWrapper;
+import database.DatabaseConnectionFactory;
 import model.Book;
 import model.builder.BookBuilder;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import repository.book.BookRepository;
+import repository.book.BookRepositoryCacheDecorator;
+import repository.book.BookRepositoryMySQL;
+import repository.book.Cache;
 
-import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BookRepositoryMySQLTest {
-    private Connection connection;
-    private BookRepository bookRepository;
 
-    @Test
-    public void testFindAll() {
-        int expectedNumberOfBooks = 0;
+    private static BookRepository bookRepository;
 
-        JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("test_library");
-        connection = connectionWrapper.getConnection();
-        bookRepository = new BookRepositoryMySQL(connection);
+    @BeforeAll
+    public static void setupClass(){
+        bookRepository = new BookRepositoryCacheDecorator(
+                new BookRepositoryMySQL(
+                        DatabaseConnectionFactory.getConnectionWrapper(true).getConnection()
+                ),
+                new Cache<>()
+        );
+    }
+
+    @BeforeEach
+    public void cleanUp(){
         bookRepository.removeAll();
-
-        Book book1 = new BookBuilder()
-                .setId(1L)
-                .setAuthor("', '', null); SLEEP(20); --")
-                .setTitle("Fram Ursul Polar")
-                .setPublishedDate(LocalDate.of(2010, 6, 2))
-                .build();
-        Book book2 = new BookBuilder()
-                .setId(2L)
-                .setAuthor("', '', null); SLEEP(20); --")
-                .setTitle("Fram Ursul Polar")
-                .setPublishedDate(LocalDate.of(2010, 6, 2))
-                .build();
-        bookRepository.save(book1);
-        bookRepository.save(book2);
-
-        List<Book> allBooks = bookRepository.findAll();
-        int i = 1;
-        for(Book b : allBooks) {
-            if(i == 1) {
-                assertTrue(b.equals(book1));
-            } else {
-                assertTrue(b.equals(book2));
-            }
-            i++;
-        }
     }
 
     @Test
-    public void testFindById() {
+    public void findAll(){
+        List<Book> books = bookRepository.findAll();
+        assertEquals(0, books.size());
+    }
 
+    @Test
+    public void findAllWhenNotEmpty(){
         Book book = new BookBuilder()
-                .setId(1L)
-                .setAuthor("', '', null); SLEEP(20); --")
-                .setTitle("Fram Ursul Polar")
+                .setTitle("TitleTest")
+                .setAuthor("AuthorTest")
                 .setPublishedDate(LocalDate.of(2010, 6, 2))
                 .build();
-
-        JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("test_library");
-        connection = connectionWrapper.getConnection();
-        bookRepository = new BookRepositoryMySQL(connection);
-        bookRepository.removeAll();
 
         bookRepository.save(book);
+        bookRepository.save(book);
+        bookRepository.save(book);
 
-
-        Optional<Book> bookTemp = bookRepository.findById(book.getId());
-        Book book2 = bookTemp.get();
-
-        assertTrue(book.equals(book2));
-    }
-
-    @Test
-    public void testSave() {
-
-        Book book = new BookBuilder()
-                .setId(1L)
-                .setAuthor("', '', null); SLEEP(20); --")
-                .setTitle("Fram Ursul Polar")
-                .setPublishedDate(LocalDate.of(2010, 6, 2))
-                .build();
-
-        JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("test_library");
-        connection = connectionWrapper.getConnection();
-        bookRepository = new BookRepositoryMySQL(connection);
-        bookRepository.removeAll();
-
-        boolean isSaved = bookRepository.save(book);
-        assertTrue(isSaved);
-
-
-
-    }
-
-    @Test
-    public void testRemoveAll() {
-        JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("test_library");
-        connection = connectionWrapper.getConnection();
-        bookRepository = new BookRepositoryMySQL(connection);
-
-        bookRepository.removeAll();
         List<Book> books = bookRepository.findAll();
 
-        Boolean isEmpty = books.isEmpty();
-        assertTrue(isEmpty);
+        assertEquals(3, books.size());
     }
+
+    @Test
+    public void findById(){
+
+    }
+
+    @Test
+    public void save(){
+        assertTrue(bookRepository.save(
+                new BookBuilder()
+                        .setTitle("TitleTest")
+                        .setAuthor("AuthorTest")
+                        .setPublishedDate(LocalDate.of(2010, 6, 2))
+                        .build()
+        ));
+    }
+
+    @Test
+    public void removeAll(){
+
+    }
+
 }

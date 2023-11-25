@@ -1,63 +1,49 @@
+import controller.LoginController;
+import database.DatabaseConnectionFactory;
 import database.JDBConnectionWrapper;
-import model.AudioBook;
+import javafx.application.Application;
+import javafx.stage.Stage;
 import model.Book;
-import model.EBook;
-import model.builder.AudioBookBuilder;
 import model.builder.BookBuilder;
-import model.builder.EBookBuilder;
-import repository.BookRepository;
-import repository.BookRepositoryMySQL;
+import model.validator.UserValidator;
+import repository.book.BookRepository;
+import repository.book.BookRepositoryCacheDecorator;
+import repository.book.BookRepositoryMySQL;
+import repository.book.Cache;
+import repository.security.RightsRolesRepository;
+import repository.security.RightsRolesRepositoryMySQL;
+import repository.user.UserRepository;
+import repository.user.UserRepositoryMySQL;
+import service.book.BookService;
+import service.book.BookServiceImpl;
+import service.user.AuthenticationService;
+import service.user.AuthenticationServiceMySQL;
+import view.LoginView;
 
+import java.sql.Connection;
 import java.time.LocalDate;
 
-public class Main {
+import static database.Constants.Schemas.PRODUCTION;
+
+public class Main extends Application {
     public static void main(String[] args){
-        System.out.println("Hello world!");
+        launch(args);
+    }
 
-        JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("test_library");
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        final Connection connection = new JDBConnectionWrapper(PRODUCTION).getConnection();
 
-        BookRepository bookRepository = new BookRepositoryMySQL(connectionWrapper.getConnection());
+        final RightsRolesRepository rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
+        final UserRepository userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
 
-        bookRepository.removeAll();
-        Book book = new BookBuilder()
-                .setAuthor("', '', null); SLEEP(20); --")
-                .setTitle("Fram Ursul Polar")
-                .setPublishedDate(LocalDate.of(2010, 6, 2))
-                .build();
-        bookRepository.save(book);
+        final AuthenticationService authenticationService = new AuthenticationServiceMySQL(userRepository,
+                rightsRolesRepository);
 
-        Book eBook = new EBookBuilder()
-                .setAuthor("a1")
-                .setId(2L)
-                .setTitle("dfg")
-                .setPublishedDate(LocalDate.of(2010, 6, 2))
-                .asEBook().setFormat("pdf")
-                .build();
-        bookRepository.save(eBook);
+        final LoginView loginView = new LoginView(primaryStage);
 
-        Book audioBook = new AudioBookBuilder()
-                .setAuthor("a2")
-                .setId(2L)
-                .setTitle("dfg")
-                .setPublishedDate(LocalDate.of(2010, 6, 2))
-                .asAudioBook().setRunTime(54)
-                .build();
-        bookRepository.save(eBook);
+        final UserValidator userValidator = new UserValidator(userRepository);
 
-        //System.out.println(bookRepository.findById(27L));
-        for(Book b : bookRepository.findAll()) {
-            if(b instanceof EBook) {
-                EBook bTemp = (EBook) b;
-               bTemp.toString();
-            } else if (b instanceof AudioBook) {
-                AudioBook bTemp = (AudioBook)b;
-                bTemp.toString();
-            } else if (b instanceof Book) {
-                System.out.println(b);
-            }
-        }
-       //System.out.println(bookRepository.findAll());
-
-
+        new LoginController(loginView, authenticationService, userValidator);
     }
 }
