@@ -38,4 +38,8 @@ public class BookServiceImpl implements BookService{
 
         return (int)ChronoUnit.YEARS.between(book.getPublishedDate(), now);
     }
+    @Override
+    public boolean deleteById(Long id) {
+        return bookRepository.deleteById(id);
+    }
 }

@@ -6,7 +6,7 @@ public class Right {
 
     private String right;
 
-    public Right(Long id, String right){
+    public Right(Long id, String right) {
         this.id = id;
         this.right = right;
     }

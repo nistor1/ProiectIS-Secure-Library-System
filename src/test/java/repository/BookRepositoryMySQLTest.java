@@ -1,4 +1,4 @@
-package repositories;
+package repository;
 
 import database.DatabaseConnectionFactory;
 import model.Book;
@@ -77,7 +77,22 @@ public class BookRepositoryMySQLTest {
 
     @Test
     public void removeAll(){
+        bookRepository.removeAll();
+        List<Book> books = bookRepository.findAll();
 
+        Boolean isEmpty = books.isEmpty();
+        assertTrue(isEmpty);
+    }
+
+    @Test
+    public void deleteById() {
+        Book book1 = new BookBuilder()
+                .setAuthor("', '', null); SLEEP(20); --")
+                .setTitle("Fram Ursul Polar")
+                .setPublishedDate(LocalDate.of(2010, 6, 2))
+                .build();
+        bookRepository.save(book1);
+        assertTrue(bookRepository.deleteById(1L));
     }
 
 }

@@ -14,4 +14,6 @@ public interface BookRepository {
 
     void removeAll();
 
+    boolean deleteById(Long id);
+
 }

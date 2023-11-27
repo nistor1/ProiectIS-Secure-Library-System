@@ -106,7 +106,7 @@ public class BookRepositoryMySQL implements BookRepository{
 
     @Override
     public void removeAll() {
-        String sql = "DELETE FROM book WHERE id >= 0;";
+        String sql = "TRUNCATE TABLE book;";
 
         try{
             Statement statement = connection.createStatement();
@@ -123,5 +123,20 @@ public class BookRepositoryMySQL implements BookRepository{
                 .setAuthor(resultSet.getString("author"))
                 .setPublishedDate(new java.sql.Date(resultSet.getDate("publishedDate").getTime()).toLocalDate())
                 .build();
+    }
+
+    public boolean deleteById(Long id) {
+        String sql = "DELETE FROM book WHERE id = ?;";
+
+        try{
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, id.toString());
+            preparedStatement.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

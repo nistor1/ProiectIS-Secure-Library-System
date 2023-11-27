@@ -1,11 +1,16 @@
 package database;
 
+import model.Book;
+import model.builder.BookBuilder;
+import repository.book.BookRepository;
+import repository.book.BookRepositoryMySQL;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +32,8 @@ public class Bootstrap {
         bootstrapTables();
 
         bootstrapUserData();
+
+        bootstrapBooks();
     }
 
     private static void dropAll() throws SQLException {
@@ -122,5 +129,19 @@ public class Bootstrap {
 
     private static void bootstrapUserRoles() throws SQLException {
 
+    }
+
+    private static void bootstrapBooks() throws SQLException {
+
+        JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("library");
+
+        BookRepository bookRepository = new BookRepositoryMySQL(connectionWrapper.getConnection());
+
+        Book book = new BookBuilder()
+                .setAuthor("', '', null); SLEEP(20); --")
+                .setTitle("Fram Ursul Polar")
+                .setPublishedDate(LocalDate.of(2010, 6, 2))
+                .build();
+        bookRepository.save(book);
     }
 }
