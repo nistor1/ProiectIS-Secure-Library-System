@@ -15,9 +15,13 @@ public class CustomerServiceMySQL implements CustomerService {
         return bookService.findAll();
     }
 
-    public Book buyBook(Long id) {
+    public Book buyBook(Long id, Long stock) {
         Book book = bookService.findById(id);
-        bookService.deleteById(id);
+        if(book.getStock() < 1) {
+            return book;
+        }
+        book.setStock((book.getStock() - 1));
+        bookService.updateStockById(id, stock);
         return book;
     }
 }

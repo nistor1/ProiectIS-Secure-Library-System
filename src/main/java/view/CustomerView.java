@@ -35,6 +35,8 @@ public class CustomerView {
     private TableColumn titleCol;
     private TableColumn publishedDateCol;
 
+    private TableColumn stockCol;
+
     public CustomerView(Stage primaryStage) {
         primaryStage.setTitle("Book Store");
 
@@ -111,9 +113,13 @@ public class CustomerView {
         publishedDateCol.setCellValueFactory(
                 new PropertyValueFactory<Book, String>("publishedDate"));
 
+        stockCol = new TableColumn("Stock");
+        stockCol.setMinWidth(200);
+        stockCol.setCellValueFactory(
+                new PropertyValueFactory<Book, String>("stock"));
 
         table.setItems(data);
-        table.getColumns().addAll(authorCol, titleCol, publishedDateCol);
+        table.getColumns().addAll(authorCol, titleCol, publishedDateCol, stockCol);
     }
     public void setActionTargetText(String text){ this.actiontarget.setText(text);}
 
@@ -133,5 +139,8 @@ public class CustomerView {
 
         this.data = observableBookList;
         table.setItems(this.data);
+        table.refresh();
+        primaryStage.show();
+
     }
 }

@@ -141,6 +141,7 @@ public class Bootstrap {
                 .setAuthor("', '', null); SLEEP(20); --")
                 .setTitle("Fram Ursul Polar")
                 .setPublishedDate(LocalDate.of(2010, 6, 2))
+                .setStock(100L)
                 .build();
         bookRepository.save(book);
     }

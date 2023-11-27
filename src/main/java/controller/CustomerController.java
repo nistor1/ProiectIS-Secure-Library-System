@@ -42,8 +42,10 @@ public class CustomerController {
         public void handle(javafx.event.ActionEvent event) {
 
             System.out.println("CUMPARA");
-            customerService.buyBook(customerView.bookSelected().getId());
+            customerService.buyBook(customerView.bookSelected().getId(), customerView.bookSelected().getStock());
+            List<Book> books = bookRepository.findAll();
 
+            customerView.setListOfBooks(books);
         }
     }
 

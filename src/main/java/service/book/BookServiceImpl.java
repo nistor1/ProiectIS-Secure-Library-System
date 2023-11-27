@@ -42,4 +42,8 @@ public class BookServiceImpl implements BookService{
     public boolean deleteById(Long id) {
         return bookRepository.deleteById(id);
     }
+    @Override
+    public boolean updateStockById(Long id, Long stock) {
+        return bookRepository.updateStockById(id, stock);
+    }
 }

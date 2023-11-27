@@ -56,4 +56,10 @@ public class BookRepositoryCacheDecorator extends BookRepositoryDecorator {
 
         return decoratedRepository.deleteById(id);
     }
+    @Override
+    public boolean updateStockById(Long id, Long stock) {
+        cache.invalidateCache();
+
+        return decoratedRepository.updateStockById(id, stock);
+    }
 }

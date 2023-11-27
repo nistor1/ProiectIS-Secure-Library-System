@@ -46,4 +46,17 @@ public class BookRepositoryMock implements BookRepository {
         }
        return false;
     }
+    @Override
+    public boolean updateStockById(Long id, Long stock) {
+        for(Book b : books) {
+            if(b.getId().equals(id)) {
+                if(stock >= 1) {
+                    b.setStock((stock - 1));
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
 }

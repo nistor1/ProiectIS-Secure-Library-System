@@ -18,6 +18,8 @@ public class Book {
 
     private LocalDate publishedDate;
 
+    private Long stock;
+
 
     public Long getId() {
         return id;
@@ -49,6 +51,13 @@ public class Book {
 
     public void setPublishedDate(LocalDate publishedDate) {
         this.publishedDate = publishedDate;
+    }
+    public Long getStock() {
+        return stock;
+    }
+
+    public void setStock(Long stock) {
+        this.stock = stock;
     }
 
     @Override
