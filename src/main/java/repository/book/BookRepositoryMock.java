@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class BookRepositoryMock implements BookRepository{
+public class BookRepositoryMock implements BookRepository {
 
     private List<Book> books;
 
-    public BookRepositoryMock(){
+    public BookRepositoryMock() {
         books = new ArrayList<>();
     }
 
@@ -34,5 +34,29 @@ public class BookRepositoryMock implements BookRepository{
     @Override
     public void removeAll() {
         books.clear();
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        for(Book b : books) {
+            if(b.getId().equals(id)) {
+
+                return books.remove(b);
+            }
+        }
+       return false;
+    }
+    @Override
+    public boolean updateStockById(Long id, Long stock) {
+        for(Book b : books) {
+            if(b.getId().equals(id)) {
+                if(stock >= 1) {
+                    b.setStock((stock - 1));
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
     }
 }

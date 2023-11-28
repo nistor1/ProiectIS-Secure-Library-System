@@ -18,6 +18,7 @@ import static database.Constants.Roles.ADMINISTRATOR;
 import static database.Constants.Roles.CUSTOMER;
 import static database.Constants.Roles.EMPLOYEE;
 import static database.Constants.Roles.ROLES;
+
 public class Constants {
 
     public static Map<String, List<String>> getRolesRights() {

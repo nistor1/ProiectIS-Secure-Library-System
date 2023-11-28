@@ -78,7 +78,7 @@ public class BookRepositoryMySQL implements BookRepository{
 
     @Override
     public boolean save(Book book) {
-        String sql = "INSERT INTO book VALUES(null, ?, ?, ?);";
+        String sql = "INSERT INTO book VALUES(null, ?, ?, ?, ?);";
 
         String newSql = "INSERT INTO book VALUES(null, \'" + book.getAuthor() +"\', \'"+ book.getTitle()+"\', null );";
 
@@ -92,6 +92,7 @@ public class BookRepositoryMySQL implements BookRepository{
             preparedStatement.setString(1, book.getAuthor());
             preparedStatement.setString(2, book.getTitle());
             preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
+            preparedStatement.setString(4, book.getStock().toString());
 
             int rowsInserted = preparedStatement.executeUpdate();
 
@@ -106,7 +107,7 @@ public class BookRepositoryMySQL implements BookRepository{
 
     @Override
     public void removeAll() {
-        String sql = "DELETE FROM book WHERE id >= 0;";
+        String sql = "TRUNCATE TABLE book;";
 
         try{
             Statement statement = connection.createStatement();
@@ -122,6 +123,44 @@ public class BookRepositoryMySQL implements BookRepository{
                 .setTitle(resultSet.getString("title"))
                 .setAuthor(resultSet.getString("author"))
                 .setPublishedDate(new java.sql.Date(resultSet.getDate("publishedDate").getTime()).toLocalDate())
+                .setStock(resultSet.getLong("stock"))
                 .build();
     }
+
+    public boolean deleteById(Long id) {
+        String sql = "DELETE FROM book WHERE id = ?;";
+        //Modificare Stoc
+       // String sqlUpdate = "UPDATE book SET stock = ? WHERE id = ?";
+
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, id.toString());
+            preparedStatement.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean updateStockById(Long id, Long stock) {
+        //Modificare Stoc
+        if(stock < 1) {
+            return false;
+        }
+        stock--;
+        String sql = "UPDATE book SET stock = ? WHERE id = ?";
+
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, stock.toString());
+            preparedStatement.setString(2, id.toString());
+            preparedStatement.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 }

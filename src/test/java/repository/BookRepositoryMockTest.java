@@ -1,4 +1,4 @@
-package repositories;
+package repository;
 
 import model.Book;
 import model.builder.BookBuilder;
@@ -9,6 +9,8 @@ import repository.book.BookRepositoryCacheDecorator;
 import repository.book.BookRepositoryMock;
 import repository.book.Cache;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,6 +49,36 @@ public class BookRepositoryMockTest {
         assertTrue(bookRepository.save(book));
     }
 
+    @Test
+    public void removeAll() {
+        Book book1 = new BookBuilder()
+                .setAuthor("', '', null); SLEEP(20); --")
+                .setTitle("Fram Ursul Polar")
+                .setPublishedDate(LocalDate.of(2010, 6, 2))
+                .build();
+        Book book2 = new BookBuilder()
+                .setAuthor("', '', null); SLEEP(20); --")
+                .setTitle("Fram Ursul Polar")
+                .setPublishedDate(LocalDate.of(2010, 6, 2))
+                .build();
+        bookRepository.save(book1);
+        bookRepository.save(book2);
 
+        bookRepository.removeAll();
+        List<Book> allBooks = bookRepository.findAll();
 
+        assertTrue(allBooks.isEmpty());
+    }
+
+    @Test
+    public void deleteById() {
+        Book book1 = new BookBuilder()
+                .setId(5L)
+                .setAuthor("', '', null); SLEEP(20); --")
+                .setTitle("Fram Ursul Polar")
+                .setPublishedDate(LocalDate.of(2010, 6, 2))
+                .build();
+        bookRepository.save(book1);
+        assertTrue(bookRepository.deleteById(5L));
+    }
 }
