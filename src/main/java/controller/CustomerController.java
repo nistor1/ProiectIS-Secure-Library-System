@@ -22,10 +22,12 @@ public class CustomerController {
     private final CustomerView customerView;
     private final BookRepository bookRepository;
     private CustomerService customerService;
-    public CustomerController(CustomerView customerView, BookRepository bookRepository, CustomerService customerService) {
+    private Notification<User> user;
+    public CustomerController(CustomerView customerView, BookRepository bookRepository, CustomerService customerService,  Notification<User> user) {
         this.customerView = customerView;
         this.bookRepository = bookRepository;
         this.customerService = customerService;
+        this.user = user;
 
         List<Book> books = bookRepository.findAll();
 
@@ -33,6 +35,7 @@ public class CustomerController {
 
         this.customerView.addBuyBookListener(new CustomerController.BuyBookListener());
         this.customerView.addFindAllButtonListener(new CustomerController.FindAllButtonListener());
+        this.customerView.addLogoutButtonListener(new CustomerController.Logout());
 
     }
 
@@ -40,8 +43,12 @@ public class CustomerController {
 
         @Override
         public void handle(javafx.event.ActionEvent event) {
+            if(customerView.bookSelected().equals(null)) {
+                System.out.println("SELECT BOOK!");
+            } else {
+                System.out.println("CUMPARA");
+            }
 
-            System.out.println("CUMPARA");
             customerService.buyBook(customerView.bookSelected().getId(), customerView.bookSelected().getStock());
             List<Book> books = bookRepository.findAll();
 
@@ -57,6 +64,16 @@ public class CustomerController {
             List<Book> books = bookRepository.findAll();
 
             customerView.setListOfBooks(books);
+        }
+    }
+    private class Logout implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent event) {
+            System.out.println("LOGOUT");
+            user.setResult(null);
+            ComponentFactory componentFactory = ComponentFactory.getInstance(false, customerView.getPrimaryStage());
+
         }
     }
 }

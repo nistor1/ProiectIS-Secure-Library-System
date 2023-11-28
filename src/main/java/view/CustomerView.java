@@ -27,6 +27,7 @@ public class CustomerView {
     private PasswordField passwordField;
     private Button buyBookButton;
     private Button findAllButton;
+    private Button logoutButton;
     private Text actiontarget;
     private Stage primaryStage;
     private TableView<Book> table = new TableView<Book>();
@@ -95,6 +96,11 @@ public class CustomerView {
         logInButtonHBox.getChildren().add(buyBookButton);
         gridPane.add(logInButtonHBox, 0, 4);
 
+        logoutButton = new Button("Logout");
+        HBox logoutButtonHBox = new HBox(10);
+        logoutButtonHBox.setAlignment(Pos.BOTTOM_LEFT);
+        logoutButtonHBox.getChildren().add(logoutButton);
+        gridPane.add(logoutButtonHBox, 0, 5);
     }
 
     private void setTableColumns() {
@@ -126,12 +132,14 @@ public class CustomerView {
     public void addFindAllButtonListener(EventHandler<ActionEvent> findAllButtonListener) {
         findAllButton.setOnAction(findAllButtonListener);
     }
-
-    public Book bookSelected() {
-        return table.getSelectionModel().getSelectedItem();
+    public void addLogoutButtonListener(EventHandler<ActionEvent> logoutButtonListener) {
+        logoutButton.setOnAction(logoutButtonListener);
     }
     public void addBuyBookListener(EventHandler<ActionEvent> buyBookListener) {
         buyBookButton.setOnAction(buyBookListener);
+    }
+    public Book bookSelected() {
+        return table.getSelectionModel().getSelectedItem();
     }
 
     public void setListOfBooks(List<Book> data) {
@@ -143,4 +151,13 @@ public class CustomerView {
         primaryStage.show();
 
     }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
 }
+

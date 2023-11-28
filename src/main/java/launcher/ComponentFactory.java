@@ -5,6 +5,8 @@ import controller.LoginController;
 import database.DatabaseConnectionFactory;
 import javafx.stage.Stage;
 import model.Role;
+import model.User;
+import model.validator.Notification;
 import repository.book.BookRepository;
 import repository.book.BookRepositoryMySQL;
 import repository.security.RightsRolesRepository;
@@ -34,9 +36,7 @@ public class ComponentFactory {
     private static ComponentFactory instance;
 
     public static ComponentFactory getInstance(Boolean componentsForTests, Stage stage){
-        if (instance == null){
-            instance = new ComponentFactory(componentsForTests, stage);
-        }
+        instance = new ComponentFactory(componentsForTests, stage);
 
         return instance;
     }
@@ -51,7 +51,7 @@ public class ComponentFactory {
         this.bookRepository = new BookRepositoryMySQL(connection);
 
     }
-    public static void customerComponentFactory(LoginView loginView) {
+    public static void customerComponentFactory(LoginView loginView, Notification<User> user) {
         CustomerView customerView = new CustomerView(loginView.getPrimaryStage());
         Connection connection = DatabaseConnectionFactory.getConnectionWrapper(false).getConnection();
         BookRepository bookRepository = new BookRepositoryMySQL(connection);
@@ -59,7 +59,7 @@ public class ComponentFactory {
         CustomerService customerService = new CustomerServiceMySQL(bookService);
 
 
-        CustomerController customerController = new CustomerController(customerView, bookRepository, customerService);
+        CustomerController customerController = new CustomerController(customerView, bookRepository, customerService, user);
     }
 
     public AuthenticationService getAuthenticationService(){

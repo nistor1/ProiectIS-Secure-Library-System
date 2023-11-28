@@ -24,4 +24,7 @@ public class CustomerServiceMySQL implements CustomerService {
         bookService.updateStockById(id, stock);
         return book;
     }
+    public void logout() {
+        ;
+    }
 }
