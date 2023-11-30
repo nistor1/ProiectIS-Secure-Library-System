@@ -25,28 +25,28 @@ public class UserValidator {
         return errors.isEmpty();
     }
 
-    private void validateUsername(String username){
-        if (!Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(username).matches()){
+    private void validateUsername(String username) {
+        if (!Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(username).matches()) {
             errors.add("Email is not valid!");
         }
     }
 
-    private void validatePassword(String password){
-        if (password.length() < MIN_PASSWORD_LENGTH){
+    private void validatePassword(String password) {
+        if (password.length() < MIN_PASSWORD_LENGTH) {
             errors.add(String.format("Password must be at least %d characters long!", MIN_PASSWORD_LENGTH));
         }
 
-        if (!containsSpecialCharacter(password)){
+        if (!containsSpecialCharacter(password)) {
             errors.add("Password must contain at least one special character.");
         }
 
-        if (!containsDigit(password)){
+        if (!containsDigit(password)) {
             errors.add("Password must contain at least one digit!");
         }
     }
 
-    private boolean containsSpecialCharacter(String password){
-        if (password == null || password.trim().isEmpty()){
+    private boolean containsSpecialCharacter(String password) {
+        if (password == null || password.trim().isEmpty()) {
             return false;
         }
         // black list

@@ -2,19 +2,19 @@ package model.validator;
 
 import java.util.*;
 
-public class Notification<T>{
+public class Notification<T> {
     private T result;
     private final List<String> errors;
 
-    public Notification(){
+    public Notification() {
         this.errors = new ArrayList<>();
     }
 
-    public void addError(String error){
+    public void addError(String error) {
         this.errors.add(error);
     }
 
-    public boolean hasErrors(){
+    public boolean hasErrors() {
         return !this.errors.isEmpty();
     }
 
@@ -23,13 +23,13 @@ public class Notification<T>{
     }
 
     public T getResult() {
-        if (hasErrors()){
+        if (hasErrors()) {
             throw new ResultFetchException(errors);
         }
         return result;
     }
 
-    public String getFormattedErrors(){
+    public String getFormattedErrors() {
         return String.join("\n", errors);
     }
 }
