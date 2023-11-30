@@ -23,7 +23,8 @@ public class CustomerController {
     private final BookRepository bookRepository;
     private CustomerService customerService;
     private Notification<User> user;
-    public CustomerController(CustomerView customerView, BookRepository bookRepository, CustomerService customerService,  Notification<User> user) {
+
+    public CustomerController(CustomerView customerView, BookRepository bookRepository, CustomerService customerService, Notification<User> user) {
         this.customerView = customerView;
         this.bookRepository = bookRepository;
         this.customerService = customerService;
@@ -43,7 +44,7 @@ public class CustomerController {
 
         @Override
         public void handle(javafx.event.ActionEvent event) {
-            if(customerView.bookSelected().equals(null)) {
+            if (customerView.bookSelected().equals(null)) {
                 System.out.println("SELECT BOOK!");
             } else {
                 System.out.println("CUMPARA");
@@ -66,6 +67,7 @@ public class CustomerController {
             customerView.setListOfBooks(books);
         }
     }
+
     private class Logout implements EventHandler<ActionEvent> {
 
         @Override

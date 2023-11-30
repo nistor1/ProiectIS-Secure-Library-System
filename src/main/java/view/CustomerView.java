@@ -49,26 +49,25 @@ public class CustomerView {
         this.primaryStage = primaryStage;
 
         initializeSceneTitle(gridPane);
-
         initializeFields(gridPane);
 
         primaryStage.show();
     }
 
-    private void initializeGridPane(GridPane gridPane){
+    private void initializeGridPane(GridPane gridPane) {
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(10, 10, 10, 10));
     }
 
-    private void initializeSceneTitle(GridPane gridPane){
+    private void initializeSceneTitle(GridPane gridPane) {
         Text sceneTitle = new Text("Customer page");
         sceneTitle.setFont(Font.font("Tahome", FontWeight.NORMAL, 20));
         gridPane.add(sceneTitle, 0, 0, 2, 1);
     }
 
-    private void initializeFields(GridPane gridPane){
+    private void initializeFields(GridPane gridPane) {
         final Label label = new Label("Address Book");
         label.setFont(new Font("Arial", 20));
 
@@ -127,17 +126,23 @@ public class CustomerView {
         table.setItems(data);
         table.getColumns().addAll(authorCol, titleCol, publishedDateCol, stockCol);
     }
-    public void setActionTargetText(String text){ this.actiontarget.setText(text);}
+
+    public void setActionTargetText(String text) {
+        this.actiontarget.setText(text);
+    }
 
     public void addFindAllButtonListener(EventHandler<ActionEvent> findAllButtonListener) {
         findAllButton.setOnAction(findAllButtonListener);
     }
+
     public void addLogoutButtonListener(EventHandler<ActionEvent> logoutButtonListener) {
         logoutButton.setOnAction(logoutButtonListener);
     }
+
     public void addBuyBookListener(EventHandler<ActionEvent> buyBookListener) {
         buyBookButton.setOnAction(buyBookListener);
     }
+
     public Book bookSelected() {
         return table.getSelectionModel().getSelectedItem();
     }

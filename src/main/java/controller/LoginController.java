@@ -36,9 +36,9 @@ public class LoginController {
 
             Notification<User> loginNotification = authenticationService.login(username, password);
 
-            if (loginNotification.hasErrors()){
+            if (loginNotification.hasErrors()) {
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
-            }else{
+            } else {
                 loginView.setActionTargetText("LogIn Successfull!");
                 ComponentFactory.customerComponentFactory(loginView, loginNotification);
             }
