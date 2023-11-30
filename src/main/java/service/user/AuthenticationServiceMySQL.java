@@ -40,7 +40,7 @@ public class AuthenticationServiceMySQL implements AuthenticationService {
         boolean userValid = userValidator.validate();
         Notification<Boolean> userRegisterNotification = new Notification<>();
 
-        if (!userValid || userRepository.existsByUsername(username)){
+        if (!userValid || userRepository.existsByUsername(username)) {
             userValidator.getErrors().forEach(userRegisterNotification::addError);
             userRegisterNotification.addError("Username already exists!");
             userRegisterNotification.setResult(Boolean.FALSE);
@@ -58,7 +58,9 @@ public class AuthenticationServiceMySQL implements AuthenticationService {
     }
 
     @Override
-    public boolean logout(User user) {return false;}
+    public boolean logout(User user) {
+        return false;
+    }
 
     private String hashPassword(String password) {
         try {
