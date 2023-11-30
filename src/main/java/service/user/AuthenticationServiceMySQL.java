@@ -40,8 +40,9 @@ public class AuthenticationServiceMySQL implements AuthenticationService {
         boolean userValid = userValidator.validate();
         Notification<Boolean> userRegisterNotification = new Notification<>();
 
-        if (!userValid){
+        if (!userValid || userRepository.existsByUsername(username)){
             userValidator.getErrors().forEach(userRegisterNotification::addError);
+            userRegisterNotification.addError("Username already exists!");
             userRegisterNotification.setResult(Boolean.FALSE);
         } else {
             user.setPassword(hashPassword(password));

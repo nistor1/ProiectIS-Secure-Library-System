@@ -38,19 +38,20 @@ public class BookRepositoryMock implements BookRepository {
 
     @Override
     public boolean deleteById(Long id) {
-        for(Book b : books) {
-            if(b.getId().equals(id)) {
+        for (Book b : books) {
+            if (b.getId().equals(id)) {
 
                 return books.remove(b);
             }
         }
-       return false;
+        return false;
     }
+
     @Override
     public boolean updateStockById(Long id, Long stock) {
-        for(Book b : books) {
-            if(b.getId().equals(id)) {
-                if(stock >= 1) {
+        for (Book b : books) {
+            if (b.getId().equals(id)) {
+                if (stock >= 1) {
                     b.setStock((stock - 1));
                     return true;
                 }

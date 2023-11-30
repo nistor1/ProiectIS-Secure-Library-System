@@ -140,8 +140,8 @@ public class Bootstrap {
         }
     }
 
-    private static void bootstrapUsers() throws SQLException{
-        for(String schema : SCHEMAS) {
+    private static void bootstrapUsers() throws SQLException {
+        for (String schema : SCHEMAS) {
             System.out.println("Bootstrapping users in " + schema + " schema");
             JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper(schema);
 
@@ -159,7 +159,7 @@ public class Bootstrap {
     }
 
     private static void bootstrapBooks() throws SQLException {
-        for(String schema : SCHEMAS) {
+        for (String schema : SCHEMAS) {
             System.out.println("Bootstrapping books in " + schema + " schema");
             JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper(schema);
 

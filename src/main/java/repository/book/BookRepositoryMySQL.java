@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class BookRepositoryMySQL implements BookRepository{
+public class BookRepositoryMySQL implements BookRepository {
 
     private final Connection connection;
 
-    public BookRepositoryMySQL(Connection connection){
+    public BookRepositoryMySQL(Connection connection) {
         this.connection = connection;
     }
 
@@ -26,7 +26,7 @@ public class BookRepositoryMySQL implements BookRepository{
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 books.add(getBookFromResultSet(resultSet));
             }
 
@@ -42,17 +42,17 @@ public class BookRepositoryMySQL implements BookRepository{
         String sql = "SELECT * FROM book WHERE id = ?";
         Optional<Book> book = Optional.empty();
 
-        try{
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 book = Optional.of(getBookFromResultSet(resultSet));
             }
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -60,10 +60,9 @@ public class BookRepositoryMySQL implements BookRepository{
     }
 
     /**
-     *
      * How to reproduce a sql injection attack on insert statement
-     *
-     *
+     * <p>
+     * <p>
      * 1) Uncomment the lines below and comment out the PreparedStatement part
      * 2) For the Insert Statement DROP TABLE SQL Injection attack to succeed we will need multi query support to be added to our connection
      * Add to JDBConnectionWrapper the following flag after the DB_URL + schema concatenation: + "?allowMultiQueries=true"
@@ -75,15 +74,11 @@ public class BookRepositoryMySQL implements BookRepository{
 
     // ALWAYS use PreparedStatement when USER INPUT DATA is present
     // DON'T CONCATENATE Strings!
-
     @Override
     public boolean save(Book book) {
         String sql = "INSERT INTO book VALUES(null, ?, ?, ?, ?);";
 
-        String newSql = "INSERT INTO book VALUES(null, \'" + book.getAuthor() +"\', \'"+ book.getTitle()+"\', null );";
-
-
-        try{
+        try {
 //            Statement statement = connection.createStatement();
 //            statement.executeUpdate(newSql);
 //            return true;
@@ -98,7 +93,7 @@ public class BookRepositoryMySQL implements BookRepository{
 
             return (rowsInserted != 1) ? false : true;
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -109,15 +104,15 @@ public class BookRepositoryMySQL implements BookRepository{
     public void removeAll() {
         String sql = "TRUNCATE TABLE book;";
 
-        try{
+        try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private Book getBookFromResultSet(ResultSet resultSet) throws SQLException{
+    private Book getBookFromResultSet(ResultSet resultSet) throws SQLException {
         return new BookBuilder()
                 .setId(resultSet.getLong("id"))
                 .setTitle(resultSet.getString("title"))
@@ -130,13 +125,13 @@ public class BookRepositoryMySQL implements BookRepository{
     public boolean deleteById(Long id) {
         String sql = "DELETE FROM book WHERE id = ?;";
         //Modificare Stoc
-       // String sqlUpdate = "UPDATE book SET stock = ? WHERE id = ?";
+        // String sqlUpdate = "UPDATE book SET stock = ? WHERE id = ?";
 
-        try{
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, id.toString());
             preparedStatement.execute();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -145,18 +140,18 @@ public class BookRepositoryMySQL implements BookRepository{
 
     public boolean updateStockById(Long id, Long stock) {
         //Modificare Stoc
-        if(stock < 1) {
+        if (stock < 1) {
             return false;
         }
         stock--;
         String sql = "UPDATE book SET stock = ? WHERE id = ?";
 
-        try{
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, stock.toString());
             preparedStatement.setString(2, id.toString());
             preparedStatement.execute();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }

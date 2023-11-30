@@ -1,4 +1,5 @@
 package repository.user;
+
 import model.User;
 import model.builder.UserBuilder;
 import model.validator.Notification;
@@ -37,16 +38,17 @@ public class UserRepositoryMySQL implements UserRepository {
 
     @Override
     public Notification<User> findByUsernameAndPassword(String username, String password) {
+        String sql = "Select * from " + USER + " where username = ? and password = ?";
 
         Notification<User> findByUsernameAndPasswordNotification = new Notification<>();
         try {
-            Statement statement = connection.createStatement();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
 
-            String fetchUserSql =
-                    "Select * from " + USER + " where username='" + username + "' and password='" + password + "'";
-            ResultSet userResultSet = statement.executeQuery(fetchUserSql);
-            if (userResultSet.next())
-            {
+            ResultSet userResultSet = preparedStatement.executeQuery();
+
+            if (userResultSet.next()) {
                 User user = new UserBuilder()
                         .setUsername(userResultSet.getString("username"))
                         .setPassword(userResultSet.getString("password"))
@@ -104,12 +106,14 @@ public class UserRepositoryMySQL implements UserRepository {
 
     @Override
     public boolean existsByUsername(String email) {
+        String sql = "Select * from " + USER + " where username = ?";
         try {
-            Statement statement = connection.createStatement();
 
-            String fetchUserSql =
-                    "Select * from `" + USER + "` where `username`=\'" + email + "\'";
-            ResultSet userResultSet = statement.executeQuery(fetchUserSql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, email);
+
+            ResultSet userResultSet = preparedStatement.executeQuery();
+
             return userResultSet.next();
 
         } catch (SQLException e) {

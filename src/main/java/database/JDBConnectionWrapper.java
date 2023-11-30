@@ -20,16 +20,15 @@ public class JDBConnectionWrapper {
     private Connection connection;
 
 
-    public JDBConnectionWrapper(String schema){
+    public JDBConnectionWrapper(String schema) {
 
         try {
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL + schema, USER, PASSWORD);
             createTables();
-        }catch (ClassNotFoundException e)
-        {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -55,7 +54,7 @@ public class JDBConnectionWrapper {
         return connection.isValid(TIMEOUT);
     }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
         return connection;
     }
 
