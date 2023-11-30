@@ -52,6 +52,7 @@ public class Book {
     public void setPublishedDate(LocalDate publishedDate) {
         this.publishedDate = publishedDate;
     }
+
     public Long getStock() {
         return stock;
     }
@@ -64,6 +65,7 @@ public class Book {
     public String toString() {
         return String.format("Id: %d | Title: %s | Author: %s | Date: %s", this.id, this.title, this.author, this.publishedDate);
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
