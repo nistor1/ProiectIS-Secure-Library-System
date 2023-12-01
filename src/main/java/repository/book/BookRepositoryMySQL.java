@@ -143,7 +143,7 @@ public class BookRepositoryMySQL implements BookRepository {
         if (stock < 1) {
             return false;
         }
-        stock--;
+
         String sql = "UPDATE book SET stock = ? WHERE id = ?";
 
         try {

@@ -37,27 +37,26 @@ public class LoginView {
         primaryStage.setScene(scene);
 
         initializeSceneTitle(gridPane);
-
         initializeFields(gridPane);
 
         primaryStage.show();
         this.primaryStage = primaryStage;
     }
 
-    private void initializeGridPane(GridPane gridPane){
+    private void initializeGridPane(GridPane gridPane) {
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(25, 25, 25, 25));
     }
 
-    private void initializeSceneTitle(GridPane gridPane){
+    private void initializeSceneTitle(GridPane gridPane) {
         Text sceneTitle = new Text("Welcome to our Book Store");
         sceneTitle.setFont(Font.font("Tahome", FontWeight.NORMAL, 20));
         gridPane.add(sceneTitle, 0, 0, 2, 1);
     }
 
-    private void initializeFields(GridPane gridPane){
+    private void initializeFields(GridPane gridPane) {
         Label userName = new Label("User Name:");
         gridPane.add(userName, 0, 1);
 
@@ -95,7 +94,9 @@ public class LoginView {
         return passwordField.getText();
     }
 
-    public void setActionTargetText(String text){ this.actiontarget.setText(text);}
+    public void setActionTargetText(String text) {
+        this.actiontarget.setText(text);
+    }
 
     public void addLoginButtonListener(EventHandler<ActionEvent> loginButtonListener) {
         logInButton.setOnAction(loginButtonListener);
@@ -104,6 +105,7 @@ public class LoginView {
     public void addRegisterButtonListener(EventHandler<ActionEvent> signInButtonListener) {
         signInButton.setOnAction(signInButtonListener);
     }
+
     public Stage getPrimaryStage() {
         return primaryStage;
     }

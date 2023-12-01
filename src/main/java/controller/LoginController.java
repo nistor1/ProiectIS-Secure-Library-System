@@ -2,26 +2,26 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import launcher.ComponentFactory;
+import launcher.componentFactory.ComponentFactory;
+import launcher.componentFactory.CustomerComponentFactory;
+import launcher.componentFactory.EmployeeBookComponentFactory;
+import model.Role;
 import model.User;
 import model.validator.Notification;
-import model.validator.UserValidator;
-import service.user.AuthenticationService;
-import view.CustomerView;
 import view.LoginView;
 
-import java.util.EventListener;
-import java.util.List;
+import static database.Constants.Roles.CUSTOMER;
+import static database.Constants.Roles.EMPLOYEE;
 
 public class LoginController {
 
     private final LoginView loginView;
-    private final AuthenticationService authenticationService;
+    private final ComponentFactory componentFactory;
 
 
-    public LoginController(LoginView loginView, AuthenticationService authenticationService) {
+    public LoginController(LoginView loginView, ComponentFactory componentFactory) {
         this.loginView = loginView;
-        this.authenticationService = authenticationService;
+        this.componentFactory = componentFactory;
 
         this.loginView.addLoginButtonListener(new LoginButtonListener());
         this.loginView.addRegisterButtonListener(new RegisterButtonListener());
@@ -34,13 +34,19 @@ public class LoginController {
             String username = loginView.getUsername();
             String password = loginView.getPassword();
 
-            Notification<User> loginNotification = authenticationService.login(username, password);
+            Notification<User> loginNotification = componentFactory.getAuthenticationService().login(username, password);
 
-            if (loginNotification.hasErrors()){
+            if (loginNotification.hasErrors()) {
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
-            }else{
-                loginView.setActionTargetText("LogIn Successfull!");
-                ComponentFactory.customerComponentFactory(loginView, loginNotification);
+            } else {
+                loginView.setActionTargetText("Login Successfull!");
+                for(Role r : loginNotification.getResult().getRoles()) {
+                    if(r.getRole().equals(EMPLOYEE)) {
+                        new EmployeeBookComponentFactory(componentFactory, loginView.getPrimaryStage(), loginNotification);
+                    } else if(r.getRole().equals(CUSTOMER)) {
+                        new CustomerComponentFactory(componentFactory, loginView.getPrimaryStage(), loginNotification);
+                    }
+                }
             }
 
         }
@@ -53,7 +59,7 @@ public class LoginController {
             String username = loginView.getUsername();
             String password = loginView.getPassword();
 
-            Notification<Boolean> registerNotification = authenticationService.register(username, password);
+            Notification<Boolean> registerNotification = componentFactory.getAuthenticationService().register(username, password);
 
             if (registerNotification.hasErrors()) {
                 loginView.setActionTargetText(registerNotification.getFormattedErrors());
