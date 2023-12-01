@@ -7,17 +7,17 @@ import launcher.componentFactory.LoginComponentFactory;
 import model.Book;
 import model.User;
 import model.validator.Notification;
-import view.CustomerView;
-import view.EmployeeView;
+import view.EmployeeBookView;
+import view.EmployeeOrderView;
 
 import java.util.List;
 
-public class EmployeeController {
-    private final EmployeeView employeeView;
+public class EmployeeOrderController {
+    private final EmployeeOrderView employeeView;
     private final ComponentFactory componentFactory;
     private Notification<User> user;
 
-    public EmployeeController(EmployeeView employeeView, ComponentFactory componentFactory, Notification<User> user) {
+    public EmployeeOrderController(EmployeeOrderView employeeView, ComponentFactory componentFactory, Notification<User> user) {
         this.employeeView = employeeView;
         this.componentFactory = componentFactory;
         this.user = user;
@@ -26,14 +26,14 @@ public class EmployeeController {
 
         employeeView.setListOfBooks(books);
 
-        this.employeeView.addSellBookButtonListener(new EmployeeController.SellBookListener());
-        this.employeeView.addFindAllButtonListener(new EmployeeController.FindAllButtonListener());
-        this.employeeView.addLogoutButtonListener(new EmployeeController.Logout());
-        this.employeeView.addAddBookButtonListener(new EmployeeController.AddBookButtonListener());
-        this.employeeView.addDeleteBookButtonListener(new EmployeeController.DeleteBookButtonListener());
-        this.employeeView.addGetReportButtonListener(new EmployeeController.GetReportButtonListener());
-        this.employeeView.addFindBookButtonListener(new EmployeeController.FindBookButtonListener());
-        this.employeeView.addUpdateStockButtonListener(new EmployeeController.UpdateStockButtonListener());
+        this.employeeView.addSellBookButtonListener(new EmployeeOrderController.SellBookListener());
+        this.employeeView.addFindAllButtonListener(new EmployeeOrderController.FindAllButtonListener());
+        this.employeeView.addLogoutButtonListener(new EmployeeOrderController.Logout());
+        this.employeeView.addAddBookButtonListener(new EmployeeOrderController.AddBookButtonListener());
+        this.employeeView.addDeleteBookButtonListener(new EmployeeOrderController.DeleteBookButtonListener());
+        this.employeeView.addGetReportButtonListener(new EmployeeOrderController.GetReportButtonListener());
+        this.employeeView.addFindBookButtonListener(new EmployeeOrderController.FindBookButtonListener());
+        this.employeeView.addUpdateStockButtonListener(new EmployeeOrderController.UpdateStockButtonListener());
 
     }
     private class SellBookListener implements EventHandler<ActionEvent> {
@@ -46,7 +46,7 @@ public class EmployeeController {
                 System.out.println("CUMPARA!");
             }
 
-            componentFactory.getEmployeeService().sellBook(employeeView.bookSelected().getId(), employeeView.bookSelected().getStock());
+            componentFactory.getEmployeeService().sellBook(employeeView.bookSelected().getId(), employeeView.bookSelected().getStock(), user.getResult().getId());
             List<Book> books = componentFactory.getBookRepository().findAll();
 
             employeeView.setListOfBooks(books);
@@ -110,7 +110,7 @@ public class EmployeeController {
         @Override
         public void handle(ActionEvent event) {
             System.out.println("VEZI CARTE!");
-           // List<Book> books = componentFactory.getBookRepository().findAll();
+            // List<Book> books = componentFactory.getBookRepository().findAll();
 
             //employeeView.setListOfBooks(books);
         }

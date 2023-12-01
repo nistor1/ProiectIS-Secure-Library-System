@@ -18,17 +18,21 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Book;
 
+import java.time.LocalDate;
 import java.util.List;
 
-public class EmployeeView {
+public class EmployeeBookView {
     private Button findAllButton;
-    private Button sellBookButton;
+    private Button goToOrderPageButton;
     private Button findBookButton;
     private Button addBookButton;
     private Button updateStockButton;
     private Button deleteBookButton;
-    private Button getReportButton;
     private Button logoutButton;
+    private TextField authorTextFieldInput = new TextField();
+    private TextField titleTextFieldInput = new TextField();
+    private DatePicker publishedDateTextFieldInput = new DatePicker();
+    private TextField stockTextFieldInput = new TextField();
     private Stage primaryStage;
     private TableView<Book> table = new TableView<Book>();
     private ObservableList<Book> data;
@@ -38,7 +42,7 @@ public class EmployeeView {
     private TableColumn stockCol;
     private Text actiontarget;
 
-    public EmployeeView(Stage primaryStage) {
+    public EmployeeBookView(Stage primaryStage) {
         primaryStage.setTitle("Book Store");
 
         GridPane gridPane = new GridPane();
@@ -85,14 +89,9 @@ public class EmployeeView {
 
         gridPane = createButtons(gridPane);
 
-        TextField titleTextFieldInput = new TextField();
-        TextField authorTextFieldInput = new TextField();
-        TextField publishedDateTextFieldInput = new TextField();
-        TextField stockTextFieldInput = new TextField();
-
         HBox inputBookTextFields = new HBox(10);
-        inputBookTextFields.getChildren().add(titleTextFieldInput);
         inputBookTextFields.getChildren().add(authorTextFieldInput);
+        inputBookTextFields.getChildren().add(titleTextFieldInput);
         inputBookTextFields.getChildren().add(publishedDateTextFieldInput);
         inputBookTextFields.getChildren().add(stockTextFieldInput);
         gridPane.add(inputBookTextFields, 0, 3, 6, 1);
@@ -136,10 +135,10 @@ public class EmployeeView {
         rightVbox.setSpacing(5);
         rightVbox.setPadding(new Insets(10, 0, 0, 10));
 
-        sellBookButton = new Button("Sell Book");
-        HBox sellBookButtonHBox = new HBox(10);
-        sellBookButtonHBox.setAlignment(Pos.BOTTOM_CENTER);
-        sellBookButtonHBox.getChildren().add(sellBookButton);
+        goToOrderPageButton = new Button("Go to orders!");
+        HBox goToOrderPageButtonHBox = new HBox(10);
+        goToOrderPageButtonHBox.setAlignment(Pos.BOTTOM_CENTER);
+        goToOrderPageButtonHBox.getChildren().add(goToOrderPageButton);
         //gridPane.add(sellBookButtonHBox, 0, 5);
 
         findBookButton = new Button("Find Book");
@@ -147,7 +146,7 @@ public class EmployeeView {
         findBookButtonHBox.setAlignment(Pos.BOTTOM_CENTER);
         findBookButtonHBox.getChildren().add(findBookButton);
         // gridPane.add(findBookButtonHBox, 2, 5);
-        leftVbox.getChildren().add(sellBookButtonHBox);
+        leftVbox.getChildren().add(goToOrderPageButtonHBox);
         leftVbox.getChildren().add(findBookButtonHBox);
         gridPane.add(leftVbox, 0, 5);
 
@@ -184,17 +183,11 @@ public class EmployeeView {
         gridPane.add(rightVbox, 2, 5);
 
 
-        getReportButton = new Button("Get Report");
-        HBox getRaportButtonHBox = new HBox(10);
-        getRaportButtonHBox.setAlignment(Pos.BOTTOM_CENTER);
-        getRaportButtonHBox.getChildren().add(getReportButton);
-        gridPane.add(getRaportButtonHBox, 3, 5);
-
         logoutButton = new Button("Logout");
         HBox logoutButtonHBox = new HBox(10);
         logoutButtonHBox.setAlignment(Pos.BOTTOM_CENTER);
         logoutButtonHBox.getChildren().add(logoutButton);
-        gridPane.add(logoutButtonHBox, 4, 5);
+        gridPane.add(logoutButtonHBox, 3, 5);
 
         return gridPane;
     }
@@ -212,8 +205,8 @@ public class EmployeeView {
         logoutButton.setOnAction(logoutButtonListener);
     }
 
-    public void addSellBookButtonListener(EventHandler<ActionEvent> sellBookButtonListener) {
-        sellBookButton.setOnAction(sellBookButtonListener);
+    public void addGoToOrdersPageButtonListener(EventHandler<ActionEvent> goToOrdersPageButtonListener) {
+        goToOrderPageButton.setOnAction(goToOrdersPageButtonListener);
     }
     public void addFindBookButtonListener(EventHandler<ActionEvent> findBookButtonListener) {
         findBookButton.setOnAction(findBookButtonListener);
@@ -226,9 +219,6 @@ public class EmployeeView {
     }
     public void addDeleteBookButtonListener(EventHandler<ActionEvent> deleteBookButtonListener) {
         deleteBookButton.setOnAction(deleteBookButtonListener);
-    }
-    public void addGetReportButtonListener(EventHandler<ActionEvent> getReportButtonListener) {
-        getReportButton.setOnAction(getReportButtonListener);
     }
     public Book bookSelected() {
         return table.getSelectionModel().getSelectedItem();
@@ -250,5 +240,31 @@ public class EmployeeView {
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+    }
+
+    public Button getFindAllButton() {
+        return findAllButton;
+    }
+
+    public String getTitleInput() {
+        return authorTextFieldInput.getText();
+    }
+
+    public String getAuthorInput() {
+        return titleTextFieldInput.getText();
+    }
+
+    public LocalDate getPublishedDateInput() {
+        return publishedDateTextFieldInput.getValue();
+    }
+
+    public Long getStockInput() {
+        try {
+            String inputText = stockTextFieldInput.getText();
+            return Long.parseLong(inputText);
+        } catch (NumberFormatException e) {
+            new IllegalAccessException("Invalid stock value!");
+            return null;
+        }
     }
 }

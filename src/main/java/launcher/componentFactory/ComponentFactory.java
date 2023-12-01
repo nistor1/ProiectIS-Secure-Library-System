@@ -1,15 +1,12 @@
 package launcher.componentFactory;
 
-import controller.CustomerController;
-import controller.LoginController;
 import database.DatabaseConnectionFactory;
-import javafx.stage.Stage;
-import model.User;
-import model.validator.Notification;
 import repository.book.BookRepository;
 import repository.book.BookRepositoryMySQL;
 import repository.order.OrderCustomerRepository;
 import repository.order.OrderCustomerRepositoryMySQL;
+import repository.order.OrderEmployeeRepository;
+import repository.order.OrderEmployeeRepositoryMySQL;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 import repository.user.UserRepository;
@@ -17,8 +14,6 @@ import repository.user.UserRepositoryMySQL;
 import service.book.BookService;
 import service.book.BookServiceImpl;
 import service.user.*;
-import view.CustomerView;
-import view.LoginView;
 
 import java.sql.Connection;
 
@@ -28,8 +23,9 @@ public class ComponentFactory {
     private final RightsRolesRepository rightsRolesRepository;
     private final BookRepository bookRepository;
     private final OrderCustomerRepository orderCustomerRepository;
+    private final OrderEmployeeRepository orderEmployeeRepository;
     private final CustomerService customerService;
-    private final EmployeeService employeeService;
+    private final EmployeeBookService employeeService;
     private final BookService bookService;
     private static ComponentFactory instance;
 
@@ -46,9 +42,10 @@ public class ComponentFactory {
         this.authenticationService = new AuthenticationServiceMySQL(userRepository, rightsRolesRepository);
         this.bookRepository = new BookRepositoryMySQL(connection);
         this.orderCustomerRepository = new OrderCustomerRepositoryMySQL(connection);
+        this.orderEmployeeRepository = new OrderEmployeeRepositoryMySQL(connection);
         this.bookService = new BookServiceImpl(bookRepository);
         this.customerService = new CustomerServiceMySQL(bookService, orderCustomerRepository);
-        this.employeeService = new EmployeeServiceMySQL(bookService);
+        this.employeeService = new EmployeeServiceMySQL(bookService, orderEmployeeRepository);
 
     }
 
@@ -80,7 +77,7 @@ public class ComponentFactory {
         return instance;
     }
 
-    public EmployeeService getEmployeeService() {
+    public EmployeeBookService getEmployeeService() {
         return employeeService;
     }
 }

@@ -4,11 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import launcher.componentFactory.ComponentFactory;
 import launcher.componentFactory.CustomerComponentFactory;
-import launcher.componentFactory.EmployeeComponentFactory;
+import launcher.componentFactory.EmployeeBookComponentFactory;
 import model.Role;
 import model.User;
 import model.validator.Notification;
-import service.user.AuthenticationService;
 import view.LoginView;
 
 import static database.Constants.Roles.CUSTOMER;
@@ -43,7 +42,7 @@ public class LoginController {
                 loginView.setActionTargetText("Login Successfull!");
                 for(Role r : loginNotification.getResult().getRoles()) {
                     if(r.getRole().equals(EMPLOYEE)) {
-                        new EmployeeComponentFactory(componentFactory, loginView, loginNotification);
+                        new EmployeeBookComponentFactory(componentFactory, loginView, loginNotification);
                     } else if(r.getRole().equals(CUSTOMER)) {
                         new CustomerComponentFactory(componentFactory, loginView, loginNotification);
                     }

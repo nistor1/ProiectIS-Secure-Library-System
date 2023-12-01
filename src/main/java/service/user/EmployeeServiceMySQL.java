@@ -1,15 +1,20 @@
 package service.user;
 
 import model.Book;
+import model.Order;
+import repository.order.OrderEmployeeRepository;
 import service.book.BookService;
 
 import java.util.List;
+import java.util.Optional;
 
-public class EmployeeServiceMySQL implements EmployeeService {
+public class EmployeeServiceMySQL implements EmployeeBookService {
     private BookService bookService;
+    private OrderEmployeeRepository orderEmployeeRepository;
 
-    public EmployeeServiceMySQL(BookService bookService) {
+    public EmployeeServiceMySQL(BookService bookService, OrderEmployeeRepository orderEmployeeRepository) {
         this.bookService = bookService;
+        this.orderEmployeeRepository = orderEmployeeRepository;
     }
 
     @Override
@@ -39,19 +44,36 @@ public class EmployeeServiceMySQL implements EmployeeService {
     }
 
     @Override
-    public Book sellBook(Long id, Long stock) {
-        Book book = bookService.findById(id);
-        if (book.getStock() < 1) {
-            return book;
+    public Order sellBook(Long id, Long stock, Long userId) {
+        Optional<Order> order = orderEmployeeRepository.findOrderById(id);
+        if (order.isEmpty()) {
+            new IllegalArgumentException("Order not found!");
+            return null;
         }
-        book.setStock((book.getStock() - 1));
-        bookService.updateStockById(id, stock);
 
-        return book;
+        if (stock < 1) {
+            new IllegalArgumentException("Insufficient stock!");
+            return null;
+        }
+
+        bookService.updateStockById(order.get().getBookId(), (stock--));
+        orderEmployeeRepository.completedBy(id, userId);
+
+        return order.get();
     }
 
     @Override
     public boolean logout() {
         return false;
+    }
+
+    @Override
+    public List<Order> viewAllOrders() {
+        return orderEmployeeRepository.getFriendlyOrders();
+    }
+
+    @Override
+    public boolean deleteOrderById(Long id) {
+        return orderEmployeeRepository.deleteById(id);
     }
 }
