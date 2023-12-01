@@ -73,7 +73,10 @@ public class OrderEmployeeRepositoryMySQL implements OrderEmployeeRepository {
     }
     public Order getFriendlyOrderFromResultSet(ResultSet resultSet) {
         try{
-            return new Order(resultSet.getString("book.author"), resultSet.getString("book.title"),
+            return new Order(resultSet.getLong("id"),
+                            resultSet.getLong("book_id"),
+                            resultSet.getLong("customer_id"),
+                            resultSet.getString("book.author"), resultSet.getString("book.title"),
                             resultSet.getString("book.publishedDate"), resultSet.getString("user_username"),
                             resultSet.getString("employee_username"));
         } catch(Exception e) {
@@ -106,7 +109,7 @@ public class OrderEmployeeRepositoryMySQL implements OrderEmployeeRepository {
 
     @Override
     public List<Order> getFriendlyOrders() {
-        String sql = "SELECT book.author, book.title, book.publishedDate, u1.username AS user_username, u2.username AS employee_username" +
+        String sql = "SELECT `order`.id AS id, `order`.book_id AS book_id, `order`.user_id AS customer_id, book.author, book.title, book.publishedDate, u1.username AS user_username, u2.username AS employee_username" +
                     " FROM book RIGHT JOIN `order` ON book.id = `order`.book_id " +
                     " JOIN `user` AS u1 ON `order`.user_id = u1.id " +
                     " LEFT JOIN `user` AS u2 ON `order`.completedByEmployee_id = u2.id";

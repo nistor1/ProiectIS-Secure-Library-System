@@ -23,7 +23,7 @@ public class CustomerController {
         this.componentFactory = componentFactory;
         this.user = user;
 
-        List<Book> books = componentFactory.getBookRepository().findAll();
+        List<Book> books = componentFactory.getBookService().findAll();
 
         customerView.setListOfBooks(books);
 
@@ -44,7 +44,7 @@ public class CustomerController {
             }
 
             componentFactory.getCustomerService().buyBook(customerView.bookSelected().getId(), customerView.bookSelected().getStock(), user.getResult().getId());
-            List<Book> books = componentFactory.getBookRepository().findAll();
+            List<Book> books = componentFactory.getBookService().findAll();
 
             customerView.setListOfBooks(books);
         }
@@ -55,7 +55,7 @@ public class CustomerController {
         @Override
         public void handle(ActionEvent event) {
             System.out.println("VEZI CARTILE");
-            List<Book> books = componentFactory.getBookRepository().findAll();
+            List<Book> books = componentFactory.getBookService().findAll();
 
             customerView.setListOfBooks(books);
         }

@@ -45,7 +45,7 @@ public class EmployeeBookController {
         public void handle(javafx.event.ActionEvent event) {
             System.out.println("MERGI LA PAGINA PENTRU COMENZI!");
 
-            new EmployeeOrderComponentFactory(componentFactory, employeeView, user);
+            new EmployeeOrderComponentFactory(componentFactory, employeeView.getPrimaryStage(), user);
         }
     }
 
@@ -54,7 +54,7 @@ public class EmployeeBookController {
         @Override
         public void handle(ActionEvent event) {
             System.out.println("VEZI CARTILE!");
-            List<Book> books = componentFactory.getBookRepository().findAll();
+            List<Book> books = componentFactory.getBookService().findAll();
 
             employeeView.setListOfBooks(books);
         }
@@ -104,7 +104,7 @@ public class EmployeeBookController {
                     .build();
 
             componentFactory.getEmployeeService().addBook(book);
-            List<Book> books = componentFactory.getBookRepository().findAll();
+            List<Book> books = componentFactory.getBookService().findAll();
 
             employeeView.setListOfBooks(books);
         }
@@ -121,7 +121,7 @@ public class EmployeeBookController {
 
             componentFactory.getEmployeeService().deleteBookById(employeeView.bookSelected().getId());
 
-            List<Book> books = componentFactory.getBookRepository().findAll();
+            List<Book> books = componentFactory.getBookService().findAll();
             employeeView.setListOfBooks(books);
         }
     }
@@ -159,11 +159,11 @@ public class EmployeeBookController {
             }
             System.out.println("ACTUALIZEAZA STOC!");
             Book book = componentFactory.getBookService().findById(employeeView.bookSelected().getId());
-            book.setStock((stock++));
+            book.setStock((stock));
 
             componentFactory.getBookService().updateStockById(book.getId(), book.getStock());
 
-            List<Book> books = componentFactory.getBookRepository().findAll();
+            List<Book> books = componentFactory.getBookService().findAll();
 
             employeeView.setListOfBooks(books);
         }

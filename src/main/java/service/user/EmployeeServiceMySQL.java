@@ -76,4 +76,14 @@ public class EmployeeServiceMySQL implements EmployeeBookService {
     public boolean deleteOrderById(Long id) {
         return orderEmployeeRepository.deleteById(id);
     }
+    @Override
+    public Order findOrderById(Long id) {
+        Optional<Order> order = orderEmployeeRepository.findOrderById(id);
+
+        if(order.isEmpty()) {
+            new IllegalArgumentException("Order not found");
+            return null;
+        }
+        return order.get();
+    }
 }

@@ -42,9 +42,9 @@ public class LoginController {
                 loginView.setActionTargetText("Login Successfull!");
                 for(Role r : loginNotification.getResult().getRoles()) {
                     if(r.getRole().equals(EMPLOYEE)) {
-                        new EmployeeBookComponentFactory(componentFactory, loginView, loginNotification);
+                        new EmployeeBookComponentFactory(componentFactory, loginView.getPrimaryStage(), loginNotification);
                     } else if(r.getRole().equals(CUSTOMER)) {
-                        new CustomerComponentFactory(componentFactory, loginView, loginNotification);
+                        new CustomerComponentFactory(componentFactory, loginView.getPrimaryStage(), loginNotification);
                     }
                 }
             }

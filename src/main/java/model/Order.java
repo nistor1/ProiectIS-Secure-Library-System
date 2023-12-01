@@ -17,7 +17,10 @@ public class Order {
         this.employeeId = employeeId;
         this.bookId = bookId;
     }
-    public Order(String author, String title, String publishedDate, String customerUsername, String employeeUsername) {
+    public Order(Long id, Long bookId, Long customerId, String author, String title, String publishedDate, String customerUsername, String employeeUsername) {
+        this.id = id;
+        this.bookId = bookId;
+        this.customerId = customerId;
         this.author = author;
         this.title = title;
         this.publishedDate = publishedDate;
@@ -95,5 +98,16 @@ public class Order {
 
     public void setEmployeeUsername(String employeeUsername) {
         this.employeeUsername = employeeUsername;
+    }
+    @Override
+    public String toString() {
+
+        return "Order{ book : " +
+                "author='" + author + '\'' +
+                ", title='" + title + '\'' +
+                ", customer='" + customerUsername + '\'' +
+                ", employee='" + employeeUsername + '\'' +
+                ", quantity = 1 book" +
+                '}';
     }
 }

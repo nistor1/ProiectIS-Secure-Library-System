@@ -3,14 +3,19 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import launcher.componentFactory.ComponentFactory;
+import launcher.componentFactory.EmployeeBookComponentFactory;
 import launcher.componentFactory.LoginComponentFactory;
 import model.Book;
+import model.Order;
 import model.User;
 import model.validator.Notification;
 import view.EmployeeBookView;
 import view.EmployeeOrderView;
 
+import javax.swing.border.Border;
 import java.util.List;
+
+import static view.PDFReportGenerator.generatePDFReport;
 
 public class EmployeeOrderController {
     private final EmployeeOrderView employeeView;
@@ -22,34 +27,41 @@ public class EmployeeOrderController {
         this.componentFactory = componentFactory;
         this.user = user;
 
-        List<Book> books = componentFactory.getBookRepository().findAll();
+        List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
 
-        employeeView.setListOfBooks(books);
+        employeeView.setListOfBooks(orders);
 
         this.employeeView.addSellBookButtonListener(new EmployeeOrderController.SellBookListener());
         this.employeeView.addFindAllButtonListener(new EmployeeOrderController.FindAllButtonListener());
         this.employeeView.addLogoutButtonListener(new EmployeeOrderController.Logout());
-        this.employeeView.addAddBookButtonListener(new EmployeeOrderController.AddBookButtonListener());
-        this.employeeView.addDeleteBookButtonListener(new EmployeeOrderController.DeleteBookButtonListener());
         this.employeeView.addGetReportButtonListener(new EmployeeOrderController.GetReportButtonListener());
-        this.employeeView.addFindBookButtonListener(new EmployeeOrderController.FindBookButtonListener());
-        this.employeeView.addUpdateStockButtonListener(new EmployeeOrderController.UpdateStockButtonListener());
+        this.employeeView.addDeleteOrderButtonListener(new EmployeeOrderController.DeleteOrderButtonListener());
+        this.employeeView.addGoBackButtonListener(new EmployeeOrderController.GoBackButtonListener());
 
     }
     private class SellBookListener implements EventHandler<ActionEvent> {
 
         @Override
         public void handle(javafx.event.ActionEvent event) {
-            if (employeeView.bookSelected().equals(null)) {
+            if (employeeView.orderSelected().equals(null)) {
                 System.out.println("SELECT BOOK!");
             } else {
-                System.out.println("CUMPARA!");
+                System.out.println("VINDE!");
+            }
+            Long id = employeeView.orderSelected().getId();
+            Order order = componentFactory.getEmployeeService().findOrderById(id);
+            if(order.getEmployeeId() != null) {
+                System.out.println("Nu poti modifica!");
+                return;
             }
 
-            componentFactory.getEmployeeService().sellBook(employeeView.bookSelected().getId(), employeeView.bookSelected().getStock(), user.getResult().getId());
-            List<Book> books = componentFactory.getBookRepository().findAll();
+            Long stock = componentFactory.getBookService().findById(employeeView.orderSelected().getBookId()).getStock();
+            Long employeeId =  user.getResult().getId();
 
-            employeeView.setListOfBooks(books);
+            componentFactory.getEmployeeService().sellBook(id, stock, employeeId);
+
+            List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
+            employeeView.setListOfBooks(orders);
         }
     }
 
@@ -58,9 +70,9 @@ public class EmployeeOrderController {
         @Override
         public void handle(ActionEvent event) {
             System.out.println("VEZI CARTILE!");
-            List<Book> books = componentFactory.getBookRepository().findAll();
+            List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
 
-            employeeView.setListOfBooks(books);
+            employeeView.setListOfBooks(orders);
         }
     }
 
@@ -75,22 +87,29 @@ public class EmployeeOrderController {
         }
     }
 
-    private class AddBookButtonListener implements EventHandler<ActionEvent> {
+    private class DeleteOrderButtonListener implements EventHandler<ActionEvent> {
 
         @Override
         public void handle(ActionEvent event) {
-            System.out.println("ADAUGA CARTE!");
-            //List<Book> books = componentFactory.getBookRepository().findAll();
+            System.out.println("STERGE COMANDA!");
 
-            //employeeView.setListOfBooks(books);
+            if (employeeView.orderSelected().equals(null)) {
+                System.out.println("SELECT BOOK!");
+            } else {
+                System.out.println("STERGE CARTE!");
+            }
+
+            componentFactory.getEmployeeService().deleteOrderById(employeeView.orderSelected().getId());
+
+            List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
+            employeeView.setListOfBooks(orders);
         }
     }
-    private class DeleteBookButtonListener implements EventHandler<ActionEvent> {
-
+    private class GoBackButtonListener implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
-            System.out.println("STERGE CARTE!");
-            //List<Book> books = componentFactory.getBookRepository().findAll();
+            System.out.println("MERGI INAPOI!");
+            new EmployeeBookComponentFactory(componentFactory, employeeView.getPrimaryStage(), user);
 
             //employeeView.setListOfBooks(books);
         }
@@ -100,29 +119,8 @@ public class EmployeeOrderController {
         @Override
         public void handle(ActionEvent event) {
             System.out.println("VEZI RAPORT!");
-            //List<Book> books = componentFactory.getBookRepository().findAll();
-
-            //employeeView.setListOfBooks(books);
-        }
-    }
-    private class FindBookButtonListener implements EventHandler<ActionEvent> {
-
-        @Override
-        public void handle(ActionEvent event) {
-            System.out.println("VEZI CARTE!");
-            // List<Book> books = componentFactory.getBookRepository().findAll();
-
-            //employeeView.setListOfBooks(books);
-        }
-    }
-    private class UpdateStockButtonListener implements EventHandler<ActionEvent> {
-
-        @Override
-        public void handle(ActionEvent event) {
-            System.out.println("ACTUALIZEAZA STOC!");
-            List<Book> books = componentFactory.getBookRepository().findAll();
-
-            employeeView.setListOfBooks(books);
+            List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
+            generatePDFReport(orders);
         }
     }
 }
