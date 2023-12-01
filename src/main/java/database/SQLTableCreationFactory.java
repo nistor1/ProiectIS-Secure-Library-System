@@ -75,10 +75,12 @@ public class SQLTableCreationFactory {
                     "  id BIGINT NOT NULL AUTO_INCREMENT," +
                     "  user_id INT NOT NULL," +
                     "  book_id BIGINT NOT NULL," +
+                    "  completedByEmployee_id INT DEFAULT 0," +
                     "  PRIMARY KEY (id)," +
                     "  UNIQUE INDEX id_UNIQUE (id ASC)," +
-                    "  INDEX user_id_idx (user_id ASC)," +
+                    "  INDEX userCustomer_id_idx (user_id ASC)," +
                     "  INDEX book_id_idx (book_id ASC)," +
+                    "  INDEX completedByEmployee_id_idx (completedByEmployee_id ASC)," +
                     "  CONSTRAINT userorder_fkid" +
                     "    FOREIGN KEY (user_id)" +
                     "    REFERENCES user (id)" +
@@ -87,6 +89,11 @@ public class SQLTableCreationFactory {
                     "  CONSTRAINT book_fkid" +
                     "    FOREIGN KEY (book_id)" +
                     "    REFERENCES book (id)" +
+                    "    ON DELETE CASCADE" +
+                    "    ON UPDATE CASCADE," +
+                    "   CONSTRAINT completedByEmployee_fkid" +
+                    "    FOREIGN KEY (completedByEmployee_id)" +
+                    "    REFERENCES user (id)" +
                     "    ON DELETE CASCADE" +
                     "    ON UPDATE CASCADE);";
             default -> "";

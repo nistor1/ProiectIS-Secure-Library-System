@@ -43,7 +43,7 @@ public class CustomerController {
                 System.out.println("CUMPARA");
             }
 
-            componentFactory.getCustomerService().buyBook(customerView.bookSelected().getId(), customerView.bookSelected().getStock());
+            componentFactory.getCustomerService().buyBook(customerView.bookSelected().getId(), customerView.bookSelected().getStock(), user.getResult().getId());
             List<Book> books = componentFactory.getBookRepository().findAll();
 
             customerView.setListOfBooks(books);

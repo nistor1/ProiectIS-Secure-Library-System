@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface CustomerService {
     List<Book> viewAllBooks();
-    Book buyBook(Long id, Long stock);
+    Book buyBook(Long idBook, Long stock, Long idUser);
     boolean logout();
 }

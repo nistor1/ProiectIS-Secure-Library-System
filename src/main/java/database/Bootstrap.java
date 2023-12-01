@@ -1,6 +1,7 @@
 package database;
 
 import model.Book;
+import model.Order;
 import model.Role;
 import model.User;
 import model.builder.BookBuilder;
@@ -9,6 +10,8 @@ import model.validator.Notification;
 import model.validator.UserValidator;
 import repository.book.BookRepository;
 import repository.book.BookRepositoryMySQL;
+import repository.order.OrderEmployeeRepository;
+import repository.order.OrderEmployeeRepositoryMySQL;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 import repository.user.UserRepository;
@@ -26,8 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import static database.Constants.Rights.RIGHTS;
-import static database.Constants.Roles.CUSTOMER;
-import static database.Constants.Roles.ROLES;
+import static database.Constants.Roles.*;
 import static database.Constants.Schemas.SCHEMAS;
 import static database.Constants.getRolesRights;
 
@@ -38,13 +40,15 @@ public class Bootstrap {
     private static RightsRolesRepository rightsRolesRepository;
 
     public static void main(String[] args) throws SQLException {
-        dropAll();
+        //dropAll();
 
-        bootstrapTables();
+        //bootstrapTables();
 
-        bootstrapUserData();
+       // bootstrapUserData();
 
-        bootstrapBooks();
+       // bootstrapBooks();
+
+        testOrderEmployeeRepository();
     }
 
     private static void dropAll() throws SQLException {
@@ -148,11 +152,10 @@ public class Bootstrap {
             JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper(schema);
 
             UserRepository userRepository = new UserRepositoryMySQL(connectionWrapper.getConnection(), rightsRolesRepository);
-            Role customerRole = rightsRolesRepository.findRoleByTitle(CUSTOMER);
 
             AuthenticationService authenticationService = new AuthenticationServiceMySQL(userRepository, rightsRolesRepository);
             authenticationService.register("aaaa.aaaa@gmail.com", "Aaaaaaaa1$");
-
+            authenticationService.register("eeee.eeee@gmail.com", "Eeeeeeee1$", EMPLOYEE);
         }
     }
 
@@ -191,4 +194,18 @@ public class Bootstrap {
 
         }
     }
+    private static void testOrderEmployeeRepository() {
+        JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper(SCHEMAS[1]);
+
+        BookRepository bookRepository = new BookRepositoryMySQL(connectionWrapper.getConnection());
+        OrderEmployeeRepository orderEmployeeRepository = new OrderEmployeeRepositoryMySQL(connectionWrapper.getConnection());
+
+        orderEmployeeRepository.completedBy(3L, 2L);
+        for(Order o : orderEmployeeRepository.getOrders()) {
+            System.out.println("id:%d---customer:%d----book:%d----employee:%d".formatted(o.getId(), o.getCustomerId(), o.getBookId(), o.getEmployeeId()));
+        }
+
+
+    }
+
 }

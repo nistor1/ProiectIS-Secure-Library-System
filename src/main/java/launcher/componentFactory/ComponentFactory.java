@@ -8,6 +8,8 @@ import model.User;
 import model.validator.Notification;
 import repository.book.BookRepository;
 import repository.book.BookRepositoryMySQL;
+import repository.order.OrderCustomerRepository;
+import repository.order.OrderCustomerRepositoryMySQL;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 import repository.user.UserRepository;
@@ -25,6 +27,7 @@ public class ComponentFactory {
     private final UserRepository userRepository;
     private final RightsRolesRepository rightsRolesRepository;
     private final BookRepository bookRepository;
+    private final OrderCustomerRepository orderCustomerRepository;
     private final CustomerService customerService;
     private final EmployeeService employeeService;
     private final BookService bookService;
@@ -42,8 +45,9 @@ public class ComponentFactory {
         this.userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
         this.authenticationService = new AuthenticationServiceMySQL(userRepository, rightsRolesRepository);
         this.bookRepository = new BookRepositoryMySQL(connection);
+        this.orderCustomerRepository = new OrderCustomerRepositoryMySQL(connection);
         this.bookService = new BookServiceImpl(bookRepository);
-        this.customerService = new CustomerServiceMySQL(bookService);
+        this.customerService = new CustomerServiceMySQL(bookService, orderCustomerRepository);
         this.employeeService = new EmployeeServiceMySQL(bookService);
 
     }

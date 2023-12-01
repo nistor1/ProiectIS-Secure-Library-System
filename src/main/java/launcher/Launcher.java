@@ -18,8 +18,8 @@ public class Launcher extends Application {
     public void start(Stage primaryStage) throws Exception {
         ComponentFactory componentFactory = ComponentFactory.getInstance(false);
 
-        //LoginComponentFactory loginComponentFactory = new LoginComponentFactory(componentFactory, primaryStage);
-        LoginView loginView =  new LoginView(primaryStage);
-        EmployeeComponentFactory employeeComponentFactory = new EmployeeComponentFactory(componentFactory, loginView, null);
+        LoginComponentFactory loginComponentFactory = new LoginComponentFactory(componentFactory, primaryStage);
+      //  LoginView loginView =  new LoginView(primaryStage);
+        //EmployeeComponentFactory employeeComponentFactory = new EmployeeComponentFactory(componentFactory, loginView, null);
     }
 }
