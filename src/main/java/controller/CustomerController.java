@@ -2,35 +2,28 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import launcher.ComponentFactory;
+import launcher.componentFactory.ComponentFactory;
+import launcher.componentFactory.LoginComponentFactory;
 import model.Book;
 import model.User;
 import model.validator.Notification;
-import model.validator.UserValidator;
 import repository.book.BookRepository;
-import repository.security.RightsRolesRepository;
-import repository.user.UserRepository;
-import service.user.AuthenticationService;
 import service.user.CustomerService;
 import view.CustomerView;
-import view.LoginView;
 
-import java.util.EventListener;
 import java.util.List;
 
 public class CustomerController {
     private final CustomerView customerView;
-    private final BookRepository bookRepository;
-    private CustomerService customerService;
+    private final ComponentFactory componentFactory;
     private Notification<User> user;
 
-    public CustomerController(CustomerView customerView, BookRepository bookRepository, CustomerService customerService, Notification<User> user) {
+    public CustomerController(CustomerView customerView, ComponentFactory componentFactory, Notification<User> user) {
         this.customerView = customerView;
-        this.bookRepository = bookRepository;
-        this.customerService = customerService;
+        this.componentFactory = componentFactory;
         this.user = user;
 
-        List<Book> books = bookRepository.findAll();
+        List<Book> books = componentFactory.getBookRepository().findAll();
 
         customerView.setListOfBooks(books);
 
@@ -50,8 +43,8 @@ public class CustomerController {
                 System.out.println("CUMPARA");
             }
 
-            customerService.buyBook(customerView.bookSelected().getId(), customerView.bookSelected().getStock());
-            List<Book> books = bookRepository.findAll();
+            componentFactory.getCustomerService().buyBook(customerView.bookSelected().getId(), customerView.bookSelected().getStock());
+            List<Book> books = componentFactory.getBookRepository().findAll();
 
             customerView.setListOfBooks(books);
         }
@@ -62,7 +55,7 @@ public class CustomerController {
         @Override
         public void handle(ActionEvent event) {
             System.out.println("VEZI CARTILE");
-            List<Book> books = bookRepository.findAll();
+            List<Book> books = componentFactory.getBookRepository().findAll();
 
             customerView.setListOfBooks(books);
         }
@@ -74,7 +67,7 @@ public class CustomerController {
         public void handle(ActionEvent event) {
             System.out.println("LOGOUT");
             user.setResult(null);
-            ComponentFactory componentFactory = ComponentFactory.getInstance(false, customerView.getPrimaryStage());
+            LoginComponentFactory loginComponentFactory = new LoginComponentFactory(componentFactory, customerView.getPrimaryStage());
 
         }
     }

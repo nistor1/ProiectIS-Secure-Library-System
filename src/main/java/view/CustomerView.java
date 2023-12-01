@@ -23,8 +23,6 @@ import java.util.List;
 
 public class CustomerView {
 
-    private TextField userTextField;
-    private PasswordField passwordField;
     private Button buyBookButton;
     private Button findAllButton;
     private Button logoutButton;
