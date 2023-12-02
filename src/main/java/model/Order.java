@@ -47,6 +47,13 @@ public class Order {
     public Long getEmployeeId() {
         return employeeId;
     }
+    public boolean employeeIdIsZero() {
+        if (employeeId == 0L) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;

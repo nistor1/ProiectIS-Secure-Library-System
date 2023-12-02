@@ -65,7 +65,12 @@ public class OrderEmployeeRepositoryMySQL implements OrderEmployeeRepository {
 
     public Order getOrderFromResultSet(ResultSet resultSet) {
         try{
-            return new Order(resultSet.getLong("id"), resultSet.getLong("user_id"), resultSet.getLong("book_id"), resultSet.getLong("completedByEmployee_id"));
+            Long id = resultSet.getLong("id");
+            Long customerId =  resultSet.getLong("user_id");
+            Long bookId = resultSet.getLong("book_id");
+            Long employeeId =  resultSet.getLong("completedByEmployee_id");
+            Order order = new Order(id,customerId, bookId,employeeId);
+            return order;
         } catch(Exception e) {
             e.printStackTrace();
         }

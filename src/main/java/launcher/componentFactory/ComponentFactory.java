@@ -14,6 +14,10 @@ import repository.user.UserRepositoryMySQL;
 import service.book.BookService;
 import service.book.BookServiceImpl;
 import service.user.*;
+import service.user.customer.CustomerService;
+import service.user.customer.CustomerServiceMySQL;
+import service.user.employee.EmployeeBookService;
+import service.user.employee.EmployeeServiceMySQL;
 
 import java.sql.Connection;
 

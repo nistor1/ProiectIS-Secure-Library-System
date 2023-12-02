@@ -33,7 +33,7 @@ public class LoginView {
         GridPane gridPane = new GridPane();
         initializeGridPane(gridPane);
 
-        Scene scene = new Scene(gridPane, 720, 480);
+        Scene scene = new Scene(gridPane, 800, 500);
         primaryStage.setScene(scene);
 
         initializeSceneTitle(gridPane);

@@ -1,14 +1,11 @@
 
 package launcher.componentFactory;
 
-import controller.EmployeeBookController;
-import controller.EmployeeOrderController;
+import controller.employee.EmployeeOrderController;
 import javafx.stage.Stage;
 import model.User;
 import model.validator.Notification;
-import view.EmployeeBookView;
-import view.EmployeeOrderView;
-import view.LoginView;
+import view.employee.EmployeeOrderView;
 
 public class EmployeeOrderComponentFactory {
 
