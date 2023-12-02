@@ -2,6 +2,7 @@ package service.user.employee;
 
 import model.Book;
 import model.Order;
+import model.User;
 import model.validator.Notification;
 import repository.order.OrderEmployeeRepository;
 import service.book.BookService;
@@ -83,8 +84,12 @@ public class EmployeeServiceMySQL implements EmployeeBookService {
     public List<Order> viewAllOrders() {
         return orderEmployeeRepository.getFriendlyOrders();
     }
-
     @Override
+    public List<Order> viewAllOrdersForEmployee(User user) {
+        return orderEmployeeRepository.getOrdersForEmployee(user);
+    }
+
+        @Override
     public boolean deleteOrderById(Long id) {
         return orderEmployeeRepository.deleteById(id);
     }

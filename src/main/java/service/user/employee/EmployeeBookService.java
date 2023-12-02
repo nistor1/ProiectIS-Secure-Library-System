@@ -2,6 +2,7 @@ package service.user.employee;
 
 import model.Book;
 import model.Order;
+import model.User;
 import model.validator.Notification;
 
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.List;
 public interface EmployeeBookService {
     List<Book> viewAllBooks();
     List<Order> viewAllOrders();
+    List<Order> viewAllOrdersForEmployee(User user);
+
     Notification<Order> sellBook(Long id, Long stock, Long userId);
     Order findOrderById(Long id);
 

@@ -194,7 +194,7 @@ public class UserRepositoryMySQL implements UserRepository {
 
     @Override
     public boolean updateUserPassword(Long id, String password) {
-        String sql = "UPDATE `user` SET passsword = ? WHERE id = ?";
+        String sql = "UPDATE `user` SET password = ? WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, password);

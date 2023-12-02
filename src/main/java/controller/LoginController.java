@@ -2,6 +2,7 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import launcher.componentFactory.AdministratorComponentFactory;
 import launcher.componentFactory.ComponentFactory;
 import launcher.componentFactory.CustomerComponentFactory;
 import launcher.componentFactory.EmployeeBookComponentFactory;
@@ -10,8 +11,7 @@ import model.User;
 import model.validator.Notification;
 import view.LoginView;
 
-import static database.Constants.Roles.CUSTOMER;
-import static database.Constants.Roles.EMPLOYEE;
+import static database.Constants.Roles.*;
 
 public class LoginController {
 
@@ -45,6 +45,8 @@ public class LoginController {
                         new EmployeeBookComponentFactory(componentFactory, loginView.getPrimaryStage(), loginNotification);
                     } else if(r.getRole().equals(CUSTOMER)) {
                         new CustomerComponentFactory(componentFactory, loginView.getPrimaryStage(), loginNotification);
+                    } else if(r.getRole().equals(ADMINISTRATOR)) {
+                        new AdministratorComponentFactory(componentFactory, loginView.getPrimaryStage(), loginNotification);
                     }
                 }
             }

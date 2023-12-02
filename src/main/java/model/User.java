@@ -40,6 +40,9 @@ public class User {
     public List<Role> getRoles() {
         return roles;
     }
+    public Role getRole() {
+        return roles.get(0);
+    }
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;

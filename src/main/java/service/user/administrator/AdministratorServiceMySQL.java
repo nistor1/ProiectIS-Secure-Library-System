@@ -38,7 +38,7 @@ public class AdministratorServiceMySQL implements AdministratorService{
     @Override
     public Notification<Boolean> updateUserPassword(Long id, String password) {
         Notification<Boolean> ret = new Notification<>();
-        ret.setResult(userRepository.updateUserUsername(id, hashPassword(password)));
+        ret.setResult(userRepository.updateUserPassword(id, hashPassword(password)));
         return ret;
     }
     @Override

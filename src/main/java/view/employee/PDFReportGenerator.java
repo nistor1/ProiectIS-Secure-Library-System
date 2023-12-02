@@ -11,8 +11,13 @@ import java.util.List;
 
 public class PDFReportGenerator {
 
-    public static void generatePDFReport(List<Order> orders) {
-        String outputPath = "pdf/ordersReport.pdf";
+    public static void generatePDFReport(List<Order> orders, boolean regularReport) {
+        String outputPath;
+        if(regularReport) {
+            outputPath = "pdf/ordersReportForEmployee.pdf";
+        } else {
+            outputPath = "pdf/ordersReportForAdministrator.pdf";
+        }
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage();
             document.addPage(page);

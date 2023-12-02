@@ -24,7 +24,7 @@ public class EmployeeOrderController {
         this.componentFactory = componentFactory;
         this.user = user;
 
-        List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
+        List<Order> orders = componentFactory.getEmployeeService().viewAllOrdersForEmployee(user.getResult());
 
         employeeView.setListOfBooks(orders);
 
@@ -62,7 +62,7 @@ public class EmployeeOrderController {
                 } else {
                     employeeView.setActionTargetText("Book sold!");
                 }
-                List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
+                List<Order> orders = componentFactory.getEmployeeService().viewAllOrdersForEmployee(user.getResult());
                 employeeView.setListOfBooks(orders);
             }
         }
@@ -73,7 +73,7 @@ public class EmployeeOrderController {
         @Override
         public void handle(ActionEvent event) {
             System.out.println("VEZI CARTILE!");
-            List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
+            List<Order> orders = componentFactory.getEmployeeService().viewAllOrdersForEmployee(user.getResult());
 
             employeeView.setListOfBooks(orders);
             employeeView.setActionTargetTextToNull();
@@ -103,7 +103,7 @@ public class EmployeeOrderController {
 
                 componentFactory.getEmployeeService().deleteOrderById(employeeView.orderSelected().getId());
 
-                List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
+                List<Order> orders = componentFactory.getEmployeeService().viewAllOrdersForEmployee(user.getResult());
                 employeeView.setListOfBooks(orders);
                 employeeView.setActionTargetTextToNull();
             }
@@ -125,8 +125,8 @@ public class EmployeeOrderController {
         @Override
         public void handle(ActionEvent event) {
             System.out.println("VEZI RAPORT!");
-            List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
-            generatePDFReport(orders);
+            List<Order> orders = componentFactory.getEmployeeService().viewAllOrdersForEmployee(user.getResult());
+            generatePDFReport(orders, true);
             employeeView.setActionTargetText("Report generated");
         }
     }

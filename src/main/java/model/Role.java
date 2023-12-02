@@ -37,6 +37,6 @@ public class Role {
         this.rights = rights;
     }
     public String toString() {
-        return id.toString() + " " + role;
+        return role;
     }
 }
