@@ -1,6 +1,7 @@
 package repository.book;
 
 import model.Book;
+import model.validator.Notification;
 
 import java.util.ArrayList;
 import java.util.List;

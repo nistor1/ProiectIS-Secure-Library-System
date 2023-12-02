@@ -18,6 +18,8 @@ import repository.user.UserRepository;
 import repository.user.UserRepositoryMySQL;
 import service.user.AuthenticationService;
 import service.user.AuthenticationServiceMySQL;
+import service.user.administrator.AdministratorService;
+import service.user.administrator.AdministratorServiceMySQL;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -48,7 +50,8 @@ public class Bootstrap {
 
         bootstrapBooks();
 
-        testOrderEmployeeRepository();
+        //testOrderEmployeeRepository();
+        testAdministratorService();
     }
 
     private static void dropAll() throws SQLException {
@@ -154,7 +157,7 @@ public class Bootstrap {
             UserRepository userRepository = new UserRepositoryMySQL(connectionWrapper.getConnection(), rightsRolesRepository);
 
             AuthenticationService authenticationService = new AuthenticationServiceMySQL(userRepository, rightsRolesRepository);
-            authenticationService.register("aaaa.aaaa@gmail.com", "Aaaaaaaa1$");
+            authenticationService.register("cccc.cccc@gmail.com", "Cccccccc1$");
             authenticationService.register("eeee.eeee@gmail.com", "Eeeeeeee1$", EMPLOYEE);
         }
     }
@@ -207,5 +210,17 @@ public class Bootstrap {
 
 
     }
-
+    private static void testAdministratorService() {
+        JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper(SCHEMAS[1]);
+        RightsRolesRepository rightsRolesRepository = new RightsRolesRepositoryMySQL(connectionWrapper.getConnection());
+        UserRepository userRepository = new UserRepositoryMySQL(connectionWrapper.getConnection(),rightsRolesRepository);
+        AuthenticationService authenticationService = new AuthenticationServiceMySQL(userRepository, rightsRolesRepository);
+        AdministratorService administratorService = new AdministratorServiceMySQL(userRepository, authenticationService);
+        administratorService.addUser("aaaa.aaaa@gmail.com", "Aaaaaaa1$", ADMINISTRATOR);
+        //System.out.println(administratorService.findUser(1L).getResult().toString());
+        administratorService.updateUserUsername(3L, "a.a@gmail.com");
+        for(User user : administratorService.findAll()) {
+            System.out.println(user.toString());
+        }
+    }
 }

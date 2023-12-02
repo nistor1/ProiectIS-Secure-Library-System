@@ -1,16 +1,10 @@
 package launcher.componentFactory;
 
-import controller.CustomerController;
-import controller.LoginController;
+import controller.customer.CustomerController;
 import javafx.stage.Stage;
 import model.User;
 import model.validator.Notification;
-import service.book.BookService;
-import service.book.BookServiceImpl;
-import service.user.CustomerService;
-import service.user.CustomerServiceMySQL;
-import view.CustomerView;
-import view.LoginView;
+import view.customer.CustomerView;
 
 public class CustomerComponentFactory {
     private final CustomerView customerView;

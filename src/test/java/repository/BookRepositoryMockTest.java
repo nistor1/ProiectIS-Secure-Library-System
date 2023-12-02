@@ -2,6 +2,7 @@ package repository;
 
 import model.Book;
 import model.builder.BookBuilder;
+import model.validator.Notification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import repository.book.BookRepository;

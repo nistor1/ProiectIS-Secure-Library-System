@@ -3,6 +3,7 @@ package repository;
 import database.DatabaseConnectionFactory;
 import model.Book;
 import model.builder.BookBuilder;
+import model.validator.Notification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

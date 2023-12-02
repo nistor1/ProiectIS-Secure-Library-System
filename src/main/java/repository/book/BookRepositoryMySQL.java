@@ -2,6 +2,7 @@ package repository.book;
 
 import model.Book;
 import model.builder.BookBuilder;
+import model.validator.Notification;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -140,12 +141,8 @@ public class BookRepositoryMySQL implements BookRepository {
 
     public boolean updateStockById(Long id, Long stock) {
         //Modificare Stoc
-        if (stock < 1) {
-            return false;
-        }
 
         String sql = "UPDATE book SET stock = ? WHERE id = ?";
-
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, stock.toString());

@@ -2,6 +2,8 @@ package repository.order;
 
 import model.Book;
 import model.Order;
+import model.User;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +67,12 @@ public class OrderEmployeeRepositoryMySQL implements OrderEmployeeRepository {
 
     public Order getOrderFromResultSet(ResultSet resultSet) {
         try{
-            return new Order(resultSet.getLong("id"), resultSet.getLong("user_id"), resultSet.getLong("book_id"), resultSet.getLong("completedByEmployee_id"));
+            Long id = resultSet.getLong("id");
+            Long customerId =  resultSet.getLong("user_id");
+            Long bookId = resultSet.getLong("book_id");
+            Long employeeId =  resultSet.getLong("completedByEmployee_id");
+            Order order = new Order(id,customerId, bookId,employeeId);
+            return order;
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -119,6 +126,32 @@ public class OrderEmployeeRepositoryMySQL implements OrderEmployeeRepository {
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                orders.add(getFriendlyOrderFromResultSet(resultSet));
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orders;
+    }
+    public List<Order> getOrdersForEmployee(User user) {
+        String sql = "SELECT `order`.id AS id, `order`.book_id AS book_id, `order`.user_id AS customer_id, book.author, book.title, book.publishedDate, u1.username AS user_username, u2.username AS employee_username" +
+                " FROM book RIGHT JOIN `order` ON book.id = `order`.book_id " +
+                " JOIN `user` AS u1 ON `order`.user_id = u1.id " +
+                " LEFT JOIN `user` AS u2 ON `order`.completedByEmployee_id = u2.id " +
+                " WHERE `order`.completedByEmployee_id = ? OR `order`.completedByEmployee_id IS NULL";
+
+        List<Order> orders = new ArrayList<>();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, user.getId());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 orders.add(getFriendlyOrderFromResultSet(resultSet));

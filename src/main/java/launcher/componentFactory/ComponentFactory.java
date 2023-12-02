@@ -14,6 +14,12 @@ import repository.user.UserRepositoryMySQL;
 import service.book.BookService;
 import service.book.BookServiceImpl;
 import service.user.*;
+import service.user.administrator.AdministratorService;
+import service.user.administrator.AdministratorServiceMySQL;
+import service.user.customer.CustomerService;
+import service.user.customer.CustomerServiceMySQL;
+import service.user.employee.EmployeeBookService;
+import service.user.employee.EmployeeServiceMySQL;
 
 import java.sql.Connection;
 
@@ -27,6 +33,7 @@ public class ComponentFactory {
     private final CustomerService customerService;
     private final EmployeeBookService employeeService;
     private final BookService bookService;
+    private final AdministratorService administratorService;
     private static ComponentFactory instance;
 
     public static ComponentFactory getInstance(Boolean componentsForTests) {
@@ -46,6 +53,7 @@ public class ComponentFactory {
         this.bookService = new BookServiceImpl(bookRepository);
         this.customerService = new CustomerServiceMySQL(bookService, orderCustomerRepository);
         this.employeeService = new EmployeeServiceMySQL(bookService, orderEmployeeRepository);
+        this.administratorService = new AdministratorServiceMySQL(userRepository,authenticationService);
 
     }
 
@@ -79,5 +87,17 @@ public class ComponentFactory {
 
     public EmployeeBookService getEmployeeService() {
         return employeeService;
+    }
+
+    public OrderCustomerRepository getOrderCustomerRepository() {
+        return orderCustomerRepository;
+    }
+
+    public OrderEmployeeRepository getOrderEmployeeRepository() {
+        return orderEmployeeRepository;
+    }
+
+    public AdministratorService getAdministratorService() {
+        return administratorService;
     }
 }

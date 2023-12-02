@@ -7,6 +7,7 @@ import static javafx.application.Application.launch;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javafx.application.Application;
+import view.customer.CustomerView;
 
 public class ViewTest extends Application {
     @Override
