@@ -24,9 +24,15 @@ public class EmployeeServiceMySQL implements EmployeeBookService {
     }
 
     @Override
-    public Book addBook(Book book) {
-        bookService.save(book);
-        return book;
+    public Notification<Book> addBook(Book book) {
+        Notification<Book> bookNotification = new Notification<>();
+        bookNotification.setResult(book);
+        if (bookService.save(book)) {
+            return bookNotification;
+        } else {
+            bookNotification.addError("Something went wrong in Data Base");
+            return  bookNotification;
+        }
     }
 
     @Override
@@ -45,22 +51,27 @@ public class EmployeeServiceMySQL implements EmployeeBookService {
     }
 
     @Override
-    public Order sellBook(Long id, Long stock, Long userId) {
+    public Notification<Order> sellBook(Long id, Long stock, Long userId) {
         Optional<Order> order = orderEmployeeRepository.findOrderById(id);
+        Notification<Order> orderNotification  =new Notification<>();
         if (order.isEmpty()) {
             new IllegalArgumentException("Order not found!");
-            return null;
+            orderNotification.addError("Order not found!");
+            return orderNotification;
         }
 
         if (stock < 1) {
             new IllegalArgumentException("Insufficient stock!");
-            return null;
+            orderNotification.addError("Insufficient stock!");
+            return orderNotification;
         }
+        stock--;
+        if(!bookService.updateStockById(order.get().getBookId(), stock) || !orderEmployeeRepository.completedBy(id, userId)) {
+            orderNotification.addError("Something went wrong in DataBase");
+        }
+        orderNotification.setResult(order.get());
 
-        bookService.updateStockById(order.get().getBookId(), (stock--));
-        orderEmployeeRepository.completedBy(id, userId);
-
-        return order.get();
+        return orderNotification;
     }
 
     @Override

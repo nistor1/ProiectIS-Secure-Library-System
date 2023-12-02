@@ -9,12 +9,12 @@ import java.util.List;
 public interface EmployeeBookService {
     List<Book> viewAllBooks();
     List<Order> viewAllOrders();
-    Order sellBook(Long id, Long stock, Long userId);
+    Notification<Order> sellBook(Long id, Long stock, Long userId);
     Order findOrderById(Long id);
 
     Book findBookById(Long id);
 
-    Book addBook(Book book);
+    Notification<Book> addBook(Book book);
 
     boolean updateStockById(Long id, Long stock);
 

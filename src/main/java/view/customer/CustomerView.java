@@ -134,7 +134,9 @@ public class CustomerView {
     public void setActionTargetText(String text) {
         this.actiontarget.setText(text);
     }
-
+    public void setActionTargetTextToNull() {
+        this.actiontarget.setText("");
+    }
     public void addFindAllButtonListener(EventHandler<ActionEvent> findAllButtonListener) {
         findAllButton.setOnAction(findAllButtonListener);
     }

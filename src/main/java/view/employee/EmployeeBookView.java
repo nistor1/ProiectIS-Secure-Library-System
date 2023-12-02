@@ -92,8 +92,8 @@ public class EmployeeBookView {
         gridPane = createButtons(gridPane);
 
         HBox inputBookTextFields = new HBox(10);
-        inputBookTextFields.getChildren().add(authorTextFieldInput);
         inputBookTextFields.getChildren().add(titleTextFieldInput);
+        inputBookTextFields.getChildren().add(authorTextFieldInput);
         inputBookTextFields.getChildren().add(publishedDateTextFieldInput);
         inputBookTextFields.getChildren().add(stockTextFieldInput);
         gridPane.add(inputBookTextFields, 0, 3, 6, 1);
@@ -202,6 +202,10 @@ public class EmployeeBookView {
     public void setActionTargetText(String text) {
         this.actiontarget.setText(text);
     }
+    public void setActionTargetTextToNull() {
+        this.actiontarget.setText("");
+    }
+
 
     public void addFindAllButtonListener(EventHandler<ActionEvent> findAllButtonListener) {
         findAllButton.setOnAction(findAllButtonListener);

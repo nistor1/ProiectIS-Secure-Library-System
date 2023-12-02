@@ -36,28 +36,35 @@ public class EmployeeOrderController {
         this.employeeView.addGoBackButtonListener(new EmployeeOrderController.GoBackButtonListener());
 
     }
+
     private class SellBookListener implements EventHandler<ActionEvent> {
 
         @Override
         public void handle(javafx.event.ActionEvent event) {
-            if (employeeView.orderSelected().equals(null)) {
-                System.out.println("SELECT BOOK!");
+            if (employeeView.orderSelected() == null) {
+                employeeView.setActionTargetText("Choose something!");
+            } else {
+                Long id = employeeView.orderSelected().getId();
+                Order order = componentFactory.getEmployeeService().findOrderById(id);
+                if (order.employeeIdIsZero() == false) {
+                    employeeView.setActionTargetText("This transaction is completed!");
+                    return;
+                }
+                System.out.println("VINDE!");
+
+                Long stock = componentFactory.getBookService().findById(employeeView.orderSelected().getBookId()).getStock();
+                Long employeeId = user.getResult().getId();
+
+                Notification<Order> orderNotification = componentFactory.getEmployeeService().sellBook(id, stock, employeeId);
+
+                if (orderNotification.hasErrors()) {
+                    employeeView.setActionTargetText(orderNotification.getFormattedErrors());
+                } else {
+                    employeeView.setActionTargetText("Book sold!");
+                }
+                List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
+                employeeView.setListOfBooks(orders);
             }
-            Long id = employeeView.orderSelected().getId();
-            Order order = componentFactory.getEmployeeService().findOrderById(id);
-            if(order.employeeIdIsZero() == false) {
-                System.out.println("Nu poti modifica!");
-                return;
-            }
-            System.out.println("VINDE!");
-
-            Long stock = componentFactory.getBookService().findById(employeeView.orderSelected().getBookId()).getStock();
-            Long employeeId =  user.getResult().getId();
-
-            componentFactory.getEmployeeService().sellBook(id, (stock - 1), employeeId);
-
-            List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
-            employeeView.setListOfBooks(orders);
         }
     }
 
@@ -69,6 +76,7 @@ public class EmployeeOrderController {
             List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
 
             employeeView.setListOfBooks(orders);
+            employeeView.setActionTargetTextToNull();
         }
     }
 
@@ -87,20 +95,21 @@ public class EmployeeOrderController {
 
         @Override
         public void handle(ActionEvent event) {
-            System.out.println("STERGE COMANDA!");
-
-            if (employeeView.orderSelected().equals(null)) {
-                System.out.println("SELECT BOOK!");
+            if (employeeView.orderSelected() == null) {
+                employeeView.setActionTargetText("Choose something!");
             } else {
                 System.out.println("STERGE CARTE!");
+
+
+                componentFactory.getEmployeeService().deleteOrderById(employeeView.orderSelected().getId());
+
+                List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
+                employeeView.setListOfBooks(orders);
+                employeeView.setActionTargetTextToNull();
             }
-
-            componentFactory.getEmployeeService().deleteOrderById(employeeView.orderSelected().getId());
-
-            List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
-            employeeView.setListOfBooks(orders);
         }
     }
+
     private class GoBackButtonListener implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
@@ -110,6 +119,7 @@ public class EmployeeOrderController {
             //employeeView.setListOfBooks(books);
         }
     }
+
     private class GetReportButtonListener implements EventHandler<ActionEvent> {
 
         @Override
@@ -117,6 +127,7 @@ public class EmployeeOrderController {
             System.out.println("VEZI RAPORT!");
             List<Order> orders = componentFactory.getEmployeeService().viewAllOrders();
             generatePDFReport(orders);
+            employeeView.setActionTargetText("Report generated");
         }
     }
 }

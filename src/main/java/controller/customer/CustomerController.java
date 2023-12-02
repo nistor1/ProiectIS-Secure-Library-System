@@ -65,6 +65,8 @@ public class CustomerController {
             List<Book> books = componentFactory.getBookService().findAll();
 
             customerView.setListOfBooks(books);
+            customerView.setActionTargetTextToNull();
+
         }
     }
 
