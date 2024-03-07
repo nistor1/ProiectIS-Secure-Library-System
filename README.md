@@ -12,5 +12,5 @@ PDF Report of all the Books sold
 
 Funcționalitatea de Admin:
 CRUD Employee
-PDF Report of all the Employee activity  
+PDF Report of all the Employee activity    
 GUI
