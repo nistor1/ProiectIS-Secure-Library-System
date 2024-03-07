@@ -1,3 +1,5 @@
+Autrntificare: Login, Logout, Criptarea parolei
+
 Funcționalitatea de Customer: 
 View All Books
 Buy Book
